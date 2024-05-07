@@ -5,11 +5,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.platformer_game.GameController">
    <children>
-      <TextField fx:id="tfUsername" layoutX="65.0" layoutY="127.0" promptText="Username" />
-      <TextField fx:id="tfPassword" layoutX="65.0" layoutY="188.0" promptText="Password" />
-      <Button fx:id="btnRegister" layoutX="162.0" layoutY="256.0" mnemonicParsing="false" onAction="#OnRegister" text="Register" />
-      <Hyperlink fx:id="hlLogInNow" layoutX="171.0" layoutY="223.0" onAction="#onLogInNow" text="Log In" />
-      <Label layoutX="27.0" layoutY="226.0" text="Already have an account?" />
+      <TextField fx:id="tfUsername" layoutX="27.0" layoutY="39.0" promptText="Username" />
+      <TextField fx:id="tfPassword" layoutX="27.0" layoutY="80.0" promptText="Password" />
+      <Button fx:id="btnRegister" layoutX="65.0" layoutY="156.0" mnemonicParsing="false" onAction="#OnRegister" text="Register" />
+      <Hyperlink fx:id="hlLogInNow" layoutX="183.0" layoutY="124.0" onAction="#onLogInNow" text="Log In" />
+      <Label layoutX="34.0" layoutY="127.0" text="Already have an account?" />
 <!--      <Button fx:id="btnLogIn" layoutX="166.0" layoutY="220.0" mnemonicParsing="false" onAction="#onLogIn" text="Button" />-->
    </children>
 </AnchorPane>
