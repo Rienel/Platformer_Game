@@ -44,7 +44,7 @@ public class GameController {
 
     @FXML
     protected void onLogInNow(ActionEvent event) throws IOException {
-        // Closes the Register after the user presses log in
+        // e close ang register ig human sa log in, gwapo si rienel
         Scene scene = ((Node) event.getSource()).getScene();
         Stage registerStage = (Stage) scene.getWindow();
         registerStage.close();
@@ -74,6 +74,7 @@ public class GameController {
                 int userId = resultSet.getInt("id");
                 LogedUser = userId;
 
+                // same thing, gwapo si rienel, i mean e close ang login fxml ig human login
                 Scene scene = ((Node) event.getSource()).getScene();
                 Stage registerStage = (Stage) scene.getWindow();
                 registerStage.close();
