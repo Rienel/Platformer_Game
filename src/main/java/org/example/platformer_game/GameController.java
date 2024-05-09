@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,7 +29,7 @@ public class GameController {
     int LogedUser = -1;
 
     @FXML
-    protected void OnRegister() {
+    protected void OnRegister(ActionEvent event) {
         String username = tfUsername.getText();
         String password = tfPassword.getText();
 
@@ -37,23 +39,40 @@ public class GameController {
             statement.setString(1, username);
             statement.setString(2, password);
             statement.executeUpdate();
+
+            Scene scene = ((Node) event.getSource()).getScene();
+            Stage registerStage = (Stage) scene.getWindow();
+            registerStage.close();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, 1280, 720));
+//            stage.setFullScreen(true);
+//            stage.setFullScreenExitHint("");
+            stage.show();
+
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @FXML
-    protected void onLogInNow(ActionEvent event) throws IOException {
-        // E close ang register after pressing the login, gwapo si rienel
+    protected void onRegisterAcc(ActionEvent event) throws IOException {
+        // E close ang login after pressing the register
         Scene scene = ((Node) event.getSource()).getScene();
-        Stage registerStage = (Stage) scene.getWindow();
-        registerStage.close();
+        Stage Login = (Stage) scene.getWindow();
+        Login.close();
 
         // Opens login fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("register.fxml"));
         Parent root = loader.load();
         Stage stage = new Stage();
-        stage.setScene(new Scene(root));
+        stage.setScene(new Scene(root, 1280, 720));
+//        stage.setFullScreen(true);
+//        stage.setFullScreenExitHint("");
         stage.show();
     }
 
@@ -74,15 +93,17 @@ public class GameController {
                 int userId = resultSet.getInt("id");
                 LogedUser = userId;
 
-                // Same thing, gwapo si rienel, i mean e close ang login
+                // e close ang login
                 Scene scene = ((Node) event.getSource()).getScene();
-                Stage registerStage = (Stage) scene.getWindow();
-                registerStage.close();
+                Stage Login = (Stage) scene.getWindow();
+                Login.close();
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Level.fxml"));
                 Parent root = loader.load();
                 Stage stage = new Stage();
-                stage.setScene(new Scene(root));
+                stage.setScene(new Scene(root, 1280, 720));
+//                stage.setFullScreen(true);
+//                stage.setFullScreenExitHint("");
                 stage.show();
             }
         } catch (SQLException | IOException e) {

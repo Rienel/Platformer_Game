@@ -1,15 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.platformer_game.GameController">
-   <children>
-      <TextField fx:id="tfUsername" layoutX="27.0" layoutY="39.0" promptText="Username" />
-      <TextField fx:id="tfPassword" layoutX="27.0" layoutY="80.0" promptText="Password" />
-      <Button fx:id="btnRegister" layoutX="65.0" layoutY="156.0" mnemonicParsing="false" onAction="#OnRegister" text="Register" />
-      <Hyperlink fx:id="hlLogInNow" layoutX="183.0" layoutY="124.0" onAction="#onLogInNow" text="Log In" />
-      <Label layoutX="34.0" layoutY="127.0" text="Already have an account?" />
-<!--      <Button fx:id="btnLogIn" layoutX="166.0" layoutY="220.0" mnemonicParsing="false" onAction="#onLogIn" text="Button" />-->
-   </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.platformer_game.GameController">
+   <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@../../../Images/temp-background.jpg" />
+      </image>
+   </ImageView>
+   <TextField fx:id="tfUsername" layoutX="544.0" layoutY="282.0" promptText="Username">
+      <font>
+         <Font name="Bodoni MT" size="15.0" />
+      </font></TextField>
+   <TextField fx:id="tfPassword" layoutX="544.0" layoutY="332.0" promptText="Password">
+      <font>
+         <Font name="Bodoni MT" size="15.0" />
+      </font></TextField>
+   <Button fx:id="btnRegister" layoutX="529.0" layoutY="374.0" mnemonicParsing="false" onAction="#OnRegister" styleClass="custom-button" textFill="WHITE">
+      <font>
+         <Font name="Bodoni MT" size="18.0" />
+      </font>
+      <graphic>
+         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" styleClass=".custom-button">
+            <image>
+               <Image url="@../../../Images/Button.png" />
+            </image>
+         </ImageView>
+      </graphic></Button>
+   <Label alignment="TOP_CENTER" layoutX="605.0" layoutY="400.0" mouseTransparent="true" style="-fx-padding: 0 0 50 0;" text="Register">
+      <font>
+         <Font name="Bodoni MT" size="20.0" />
+      </font></Label>
+   <!--      <Button fx:id="btnLogIn" layoutX="166.0" layoutY="220.0" mnemonicParsing="false" onAction="#onLogIn" text="Button" />-->
 </AnchorPane>
