@@ -1,5 +1,7 @@
 package Paul;
 
+import Charles.LevelUI;
+import Paul.Question;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -38,14 +40,14 @@ public class GameDialog extends Stage {
             correct = answerBox.getText().equals(fieldAnswer.getText());
 
             if(correct){
-                MainApp.scoreTxt.setText(String.valueOf(MainApp.score+=1));
+                LevelUI.scoreTxt.setText(String.valueOf(LevelUI.score+=1));
                 randomQ[(ctr-1)%10] = -1;
-                MainApp.setRunning(true);
+                LevelUI.setRunning(true);
                 this.close();
             }else {
                 hintBox.setText("Wrong");
                 hintBox.setVisible(true);
-                MainApp.setRunning(true);
+                LevelUI.setRunning(true);
             }
         });
         btnhint.setOnAction(event -> {

@@ -1,10 +1,15 @@
-package Paul;
+package Charles;
 
+import Paul.LevelData;
+import Paul.Player;
+import Paul.Tiles;
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,14 +18,18 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Random;
 
-public class Main extends Application implements Runnable{
 
-    private HashMap<KeyCode, Boolean>keys = new HashMap<>();
+public class LevelUI implements Runnable{
+
+    @FXML
+    private Button lvlOneButton;
+
+    private HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private ArrayList<Node> platfomrs = new ArrayList<>();
     private ArrayList<Node> coins = new ArrayList<>();
     private ArrayList<Node> hints = new ArrayList<>();
@@ -31,7 +40,7 @@ public class Main extends Application implements Runnable{
     private Pane gameRoot = new Pane();
     private Pane uiRoot = new Pane();
 
-    private GameDialog dialog = new GameDialog();
+    private Paul.GameDialog dialog = new Paul.GameDialog();
 
     public static int hintPoints=0;
     public static int score =0;
@@ -40,7 +49,7 @@ public class Main extends Application implements Runnable{
     public static Label scoreTxt =  new Label();
 
 
-    private Node player = new Player(30,600,40,40,Color.BLUE).getEntityAsNode();
+    private Node player = new Player(30,600,40,40, Color.BLUE).getEntityAsNode();
 
     private Point2D playervelocity = new Point2D(0,0);
     private boolean canjump = true;
@@ -226,6 +235,7 @@ public class Main extends Application implements Runnable{
             }
             player.setTranslateY(player.getTranslateY() + (movingdown ? 1: -1));
         }
+
     }
     private void jumpplayer(){
         if(canjump){
@@ -237,27 +247,21 @@ public class Main extends Application implements Runnable{
         return keys.getOrDefault(key,false);
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
-
+    @FXML
+    private void lvlOneButtonOnClick(ActionEvent actionEvent) throws IOException {
         initcontent();
 
+        Stage stage = (Stage) lvlOneButton.getScene().getWindow();
         Scene scene = new Scene(appRoot);
         scene.setOnKeyPressed(event -> keys.put(event.getCode(),true));
         scene.setOnKeyReleased(event -> keys.put(event.getCode(),false));
         stage.setScene(scene);
         stage.show();
         gameThread.start();
-
-
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 
     public static void setRunning(boolean running) {
-        Main.running = running;
+        LevelUI.running = running;
     }
 
 
@@ -290,4 +294,5 @@ public class Main extends Application implements Runnable{
         };
         timer.start();
     }
+
 }
