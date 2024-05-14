@@ -2,6 +2,7 @@ package org.example.platformer_game;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -73,6 +74,14 @@ public class GameDialog extends Stage {
         Scene scene = new Scene(vBox);
         setScene(scene);
         initModality(Modality.APPLICATION_MODAL);
+    }
+
+    public void display(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public void randomizer(){

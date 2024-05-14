@@ -18,16 +18,16 @@ import java.util.*;
 
 public class MainApp extends Application {
 
-    private HashMap<KeyCode, Boolean> keys = new HashMap<>();
-    private ArrayList<Node> platforms = new ArrayList<>();
-    private ArrayList<Node> mysteryQ = new ArrayList<>();
-    private ArrayList<Node> hints = new ArrayList<>();
+    private final HashMap<KeyCode, Boolean> keys = new HashMap<>();
+    private final ArrayList<Node> platforms = new ArrayList<>();
+    private final ArrayList<Node> mysteryQ = new ArrayList<>();
+    private final ArrayList<Node> hints = new ArrayList<>();
 
-    private Pane appRoot = new Pane();
-    private Pane gameRoot = new Pane();
-    private Pane uiRoot = new Pane();
+    private final Pane appRoot = new Pane();
+    private final Pane gameRoot = new Pane();
+    private final Pane uiRoot = new Pane();
 
-    private GameDialog dialog = new GameDialog();
+    private final GameDialog dialog = new GameDialog();
 
     public static int hintPoints = 0;
     public static int score = 0;
@@ -35,9 +35,10 @@ public class MainApp extends Application {
     public static Label hintPointsTxt = new Label();
     public static Label scoreTxt = new Label();
 
-    private Player player = new Player(30, 600, 40, 40);
+    private final Player player = new Player(70, 430, 40, 40);
     private Point2D playerVelocity = new Point2D(0, 0);
     private boolean canJump = true;
+    private boolean onGround = true;
 
     private int levelWidth;
 
@@ -46,7 +47,7 @@ public class MainApp extends Application {
     private Tiles tile;
 
     private void initContent() {
-        Image bgk = new Image("Picasso-Room.jpg");
+        Image bgk = new Image("background-img.png");
         ImageView bg = new ImageView(bgk);
 
         bg.setFitHeight(LevelData.LEVEL_ONE.length * 60);
@@ -73,11 +74,12 @@ public class MainApp extends Application {
             for (int j = 0; j < line.length(); j++) {
                 switch (line.charAt(j)) {
                     case '0':
+                        tile = new Tiles(j * 60, i * 60, 60, 60, 1);
+                        gameRoot.getChildren().addAll(tile.getImageView());
                         break;
                     case '1':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 1);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
+                        tile = new Tiles(j * 60, i * 60, 60, 60, 10);
+                        gameRoot.getChildren().addAll(tile.getImageView());
                         break;
                     case '2':
                         tile = new Tiles(j * 60, i * 60, 60, 60, 2);
@@ -121,6 +123,41 @@ public class MainApp extends Application {
                         platforms.add(tile.getHitBox());
                         gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
                         break;
+                    case 'l':
+                        tile = new Tiles(j * 60, i * 60, 60, 60, 11);
+                        platforms.add(tile.getHitBox());
+                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
+                        break;
+                    case 'r':
+                        tile = new Tiles(j * 60, i * 60, 60, 60, 12);
+                        platforms.add(tile.getHitBox());
+                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
+                        break;
+                        //u ,i ,j ,k for the corners i visualize lng gi tupad ra nako
+                    case 'u':
+                        tile = new Tiles(j * 60, i * 60, 60, 60, 13);
+                        platforms.add(tile.getHitBox());
+                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
+                        break;
+                    case 'i':
+                        tile = new Tiles(j * 60, i * 60, 60, 60, 14);
+                        platforms.add(tile.getHitBox());
+                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
+                        break;
+                    case 'j':
+                        tile = new Tiles(j * 60, i * 60, 60, 60, 15);
+                        platforms.add(tile.getHitBox());
+                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
+                        break;
+                    case 'k':
+                        tile = new Tiles(j * 60, i * 60, 60, 60, 16);
+                        platforms.add(tile.getHitBox());
+                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
+                        break;
+//                    default:
+//                        tile = new Tiles(j * 60, i * 60, 60, 60, 1);
+//                        gameRoot.getChildren().addAll(tile.getImageView());
+//                        break;
                 }
             }
         }
@@ -139,34 +176,33 @@ public class MainApp extends Application {
 
     private void update() {
         ImageView playerImageView = player.getImage();
+//        boolean OnGround = false;
 
         if (!isPressed(KeyCode.W) && !isPressed(KeyCode.A) && !isPressed(KeyCode.D)) {
             startAnimation(playerImageView, "/idle.png", 4, 1, 4, 48, 80, 5);
         }
 
-        if (isPressed(KeyCode.W) && player.getHitBox().getTranslateY() >= 5 && canJump) {
+        if (isPressed(KeyCode.W) && player.getHitBox().getTranslateY() >= 5 && canJump && onGround) {
             jumpPlayer();
         }
         if (isPressed(KeyCode.A) && player.getHitBox().getTranslateX() >= 5) {
             startAnimation(playerImageView, "/run.png", 6, 1, 6, 48, 80, 5);
             playerImageView.setScaleX(-1);
-            movePlayerX(-4);
+            movePlayerX(-5);
         }
         if (isPressed(KeyCode.D) && player.getHitBox().getTranslateX() + 40 <= levelWidth - 5) {
             startAnimation(playerImageView, "/run.png", 6, 1, 6, 48, 80, 5);
             playerImageView.setScaleX(1);
-            movePlayerX(4);
+            movePlayerX(5);
         }
         if (playerVelocity.getY() < 10) {
             playerVelocity = playerVelocity.add(0, 1);
         }
 
         if (playerVelocity.getY() < 0) {
-            // Jumping up
-            setFrame(playerImageView, "/jump.png", 4, 1, 4, 48, 80, 1, 1); // Second frame for jumping up
+            setFrame(playerImageView, "/jump.png", 4, 1, 4, 48, 80, 1, 1);
         } else if (playerVelocity.getY() > 0 && !canJump) {
-            // Falling down
-            setFrame(playerImageView, "/jump.png", 4, 1, 4, 48, 80, 1, 2); // Third frame for falling down
+            setFrame(playerImageView, "/jump.png", 4, 1, 4, 48, 80, 1, 2);
         }
 
         movePlayerY((int) playerVelocity.getY());
@@ -242,7 +278,6 @@ public class MainApp extends Application {
 
     private void movePlayerY(int value) {
         boolean movingDown = value > 0;
-        boolean onGround = false;
 
         for (int i = 0; i < Math.abs(value); i++) {
             for (Node platform : platforms) {
@@ -271,7 +306,7 @@ public class MainApp extends Application {
         }
 
         if (!movingDown && !onGround) {
-            canJump = false;  // disable jumping when falling
+            canJump = false;
         }
     }
 

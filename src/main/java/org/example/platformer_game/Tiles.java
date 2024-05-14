@@ -30,7 +30,7 @@ public class Tiles {
 
         switch (type) {
             case 1:
-                image = new Image("background-tile.png");
+                image = new Image("Inside.png");
                 break;
             case 2:
                 image = new Image("mysteryQ.png");
@@ -56,6 +56,27 @@ public class Tiles {
             case 9:
                 image = new Image("bottom-left.png");
                 break;
+            case 10:
+                image = new Image("background-tile.png");
+                break;
+            case 11:
+                image = new Image("left.png");
+                break;
+            case 12:
+                image = new Image("right.png");
+                break;
+            case 13:
+                image = new Image("corner-tl.png");
+                break;
+            case 14:
+                image = new Image("corner-tr.png");
+                break;
+            case 15:
+                image = new Image("corner-bl.png");
+                break;
+            case 16:
+                image = new Image("corner-br.png");
+                break;
         }
 
         imageView = new ImageView(image);
@@ -64,7 +85,7 @@ public class Tiles {
         hitBox.setTranslateX(x);
         hitBox.setTranslateY(y);
 
-        hitBox.setFill(Color.RED);
+        hitBox.setFill(Color.TRANSPARENT);
         hitBox.getProperties().put("alive", true);
 
         imageView.setFitHeight(60);
