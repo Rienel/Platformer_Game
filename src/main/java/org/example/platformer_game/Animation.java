@@ -1,43 +1,66 @@
 package org.example.platformer_game;
 
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
 
-public class Animation {
-    private ImageView imageView;
-    private Image[] frames;
-    private int frameIndex;
-    private long lastFrameTime;
-    private long frameDuration; // in nanoseconds
+public class Animation extends AnimationTimer {
 
-    public Animation(ImageView imageView, Image[] frames, Duration duration) {
+    private final ImageView imageView;
+
+    private final int totalFrames; // frames na nas img
+    private final float fps;
+
+    private final int cols; // num of cols in the sprite sheet
+    private final int rows; // num of rows in the sprite sheet
+
+    private final int frameWidth; // iyang width
+    private final int frameHeight; // iyang height
+
+    private int currentCol = 0;
+    private int currentRow = 0;
+    private long lastFrame = 0;
+
+    public Animation(ImageView imageView, Image image, int columns, int rows, int totalFrames, int frameWidth, int frameHeight, float framesPerSecond) {
         this.imageView = imageView;
-        this.frames = frames;
-        this.frameIndex = 0;
-        this.frameDuration = (long) (duration.toMillis() * 1_000_000);
+        imageView.setImage(image);
+        imageView.setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight));
+
+        cols = columns;
+        this.rows = rows;
+        this.totalFrames = totalFrames;
+        this.frameWidth = frameWidth;
+        this.frameHeight = frameHeight;
+        fps = framesPerSecond;
+
+        lastFrame = System.nanoTime();
     }
 
-    public void play() {
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                if (now - lastFrameTime >= frameDuration) {
-                    frameIndex = (frameIndex + 1) % frames.length;
-                    imageView.setImage(frames[frameIndex]);
-                    lastFrameTime = now;
-                }
+    @Override
+    public void handle(long now) {
+        int frameJump = (int) Math.floor((now - lastFrame) / (1000000000 / fps));
+
+        if (frameJump >= 1) {
+            lastFrame = now;
+            int addRows = (int) Math.floor((float) frameJump / (float) cols);
+            int frameAdd = frameJump - (addRows * cols);
+
+            if (currentCol + frameAdd >= cols) {
+                currentRow += addRows + 1;
+                currentCol = frameAdd - (cols - currentCol);
+            } else {
+                currentRow += addRows;
+                currentCol += frameAdd;
             }
-        };
-        timer.start();
-    }
+            currentRow = (currentRow >= rows) ? currentRow - ((int) Math.floor((float) currentRow / rows) * rows) : currentRow;
 
-    public void stop() {
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {}
-        };
-        timer.stop();
+            if ((currentRow * cols) + currentCol >= totalFrames) {
+                currentRow = 0;
+                currentCol = Math.abs(currentCol - (totalFrames - (int) (Math.floor((float) totalFrames / cols) * cols)));
+            }
+
+            imageView.setViewport(new Rectangle2D(currentCol * frameWidth, currentRow * frameHeight, frameWidth, frameHeight));
+        }
     }
 }

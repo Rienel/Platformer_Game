@@ -14,8 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class MainApp extends Application {
 
@@ -24,7 +23,9 @@ public class MainApp extends Application {
     private ArrayList<Node> mysteryQ = new ArrayList<>();
     private ArrayList<Node> hints = new ArrayList<>();
 
+    // appRoot = main game window
     private Pane appRoot = new Pane();
+    // gameRoot = game scene
     private Pane gameRoot = new Pane();
     private Pane uiRoot = new Pane();
 
@@ -36,7 +37,7 @@ public class MainApp extends Application {
     public static Label hintPointsTxt = new Label();
     public static Label scoreTxt = new Label();
 
-    private Player player = new Player(30, 600, 64, 64);
+    private Player player = new Player(30, 600, 40, 40);
     private Point2D playerVelocity = new Point2D(0, 0);
     private boolean canJump = true;
 
@@ -46,12 +47,25 @@ public class MainApp extends Application {
     private static boolean running = true;
     private Tiles tile;
 
+
+    //For the animation ni siya
+//    private int columns = 6;
+//    private int rows = 1;
+//    private int totalNumberOfFrames = 6;
+//    private int frameWidth = 48;
+//    private int frameHeight = 80;
+//    private float FPS = 10;
+
+    // frameWidth = original width / frames (frameHeight is 80 lng ghapon)
+
     private void initContent() {
         Image bgk = new Image("Picasso-Room.jpg");
         ImageView bg = new ImageView(bgk);
 
         bg.setFitHeight(LevelData.LEVEL_ONE.length * 60);
         bg.setFitWidth(1280);
+
+
 
         hintPointsTxt.setText(String.valueOf(hintPoints));
         hintPointsTxt.setPrefHeight(hintPointsTxt.getFont().getSize());
@@ -69,6 +83,7 @@ public class MainApp extends Application {
 
         levelWidth = LevelData.LEVEL_ONE[0].length() * 60;
 
+        // adding tiles platform
         for (int i = 0; i < LevelData.LEVEL_ONE.length; i++) {
             String line = LevelData.LEVEL_ONE[i];
             for (int j = 0; j < line.length(); j++) {
@@ -96,8 +111,10 @@ public class MainApp extends Application {
             }
         }
 
-        gameRoot.getChildren().addAll(player.getHitBox(), player.getImageView());
+        // adding player entity
+        gameRoot.getChildren().addAll(player.getHitBox(), player.getImage());
 
+        // for moving map
         player.getHitBox().translateXProperty().addListener((obs, old, newValue) -> {
             int offset = newValue.intValue();
             if (offset > 640 && offset < levelWidth - 640) {
@@ -105,53 +122,105 @@ public class MainApp extends Application {
             }
         });
 
+        // adding all Node to main game window
         appRoot.getChildren().addAll(bg, gameRoot, uiRoot, scoreTxt, hintPointsTxt);
     }
 
     private void update() {
-        if (isPressed(KeyCode.SPACE) && player.getTranslateY() >= 5) {
+        ImageView playerImageView = player.getImage();
+
+        if(!isPressed(KeyCode.W) && !isPressed(KeyCode.A) && !isPressed(KeyCode.D)) {
+            int columns = 4;
+            int rows = 1;
+            int totalNumberOfFrames = 4;
+            int frameWidth = 48;
+            int frameHeight= 80;
+            int FPS = 5;
+            Animation anim = new Animation(playerImageView, new Image("/idle.png"), columns, rows, totalNumberOfFrames, frameWidth, frameHeight, FPS);
+            anim.start();
+        }
+
+        if (isPressed(KeyCode.W) && player.getHitBox().getTranslateY() >= 5) {
+            int columns = 4;
+            int rows = 1;
+            int totalNumberOfFrames = 4;
+            int frameWidth = 48;
+            int frameHeight= 80;
+            int FPS = 5;
+            Animation anim = new Animation(playerImageView, new Image("/jump.png"), columns, rows, totalNumberOfFrames, frameWidth, frameHeight, FPS);
+            anim.start();
             jumpPlayer();
-            player.setState("jump");
         }
-
-        if (isPressed(KeyCode.LEFT) && player.getTranslateX() >= 5) {
+        if (isPressed(KeyCode.A) && player.getHitBox().getTranslateX() >= 5) {
+            int columns = 6;
+            int rows = 1;
+            int totalNumberOfFrames = 6;
+            int frameWidth = 48;
+            int frameHeight= 80;
+            int FPS = 5;
+            Animation anim = new Animation(playerImageView, new Image("/run.png"), columns, rows, totalNumberOfFrames, frameWidth, frameHeight, FPS);
+            anim.start();
+            playerImageView.setScaleX(-1);
             movePlayerX(-5);
-            player.setState("run");
         }
-
-        if (isPressed(KeyCode.RIGHT) && player.getTranslateX() + 40 <= levelWidth - 5) {
+        if (isPressed(KeyCode.D) && player.getHitBox().getTranslateX() + 40 <= levelWidth - 5) {
+            int columns = 6;
+            int rows = 1;
+            int totalNumberOfFrames = 6;
+            int frameWidth = 48;
+            int frameHeight= 80;
+            int FPS = 10;
+            Animation anim = new Animation(playerImageView, new Image("/run.png"), columns, rows, totalNumberOfFrames, frameWidth, frameHeight, FPS);
+            anim.start();
+            playerImageView.setScaleX(1);
             movePlayerX(5);
-            player.setState("run");
         }
-
         if (playerVelocity.getY() < 10) {
             playerVelocity = playerVelocity.add(0, 1);
         }
 
         movePlayerY((int) playerVelocity.getY());
 
-        if (isPressed(KeyCode.LEFT) || isPressed(KeyCode.RIGHT) || isPressed(KeyCode.SPACE)) {
-            player.playAnimation();
-        } else {
-            player.setState("idle");
-            player.idleAnimation();
+        for (Node coin : mysteryQ) {
+            if (player.getHitBox().getBoundsInParent().intersects(coin.getBoundsInParent())) {
+                if (isPressed(KeyCode.E)) {
+                    if ((boolean) coin.getProperties().get("alive")) {
+                        dialogEvent = true;
+                        running = false;
+                    }
+                }
+                if (dialog.isCorrect()) {
+                    gameRoot.getChildren().remove(coin);
+                    gameRoot.getChildren().remove(tile.getImageView());
+                    coin.getProperties().put("alive", false);
+                }
+            }
         }
+        dialog.setCorrect(false);
 
-        for (Node mysteryBox : mysteryQ) {
-            if (player.getHitBox().getBoundsInParent().intersects(mysteryBox.getBoundsInParent())) {
-                mysteryBox.getProperties().put("alive", false);
-                mysteryBox.setVisible(false);
-                dialogEvent = true;
-                running = false;
+        for (Iterator<Node> it = mysteryQ.iterator(); it.hasNext(); ) {
+            Node coin = it.next();
+            if (dialog.isCorrect()) {
+                if (!(Boolean) coin.getProperties().get("alive")) {
+                    it.remove();
+                    gameRoot.getChildren().remove(coin);
+                }
             }
         }
 
-        for (Node hintBox : hints) {
-            if (player.getHitBox().getBoundsInParent().intersects(hintBox.getBoundsInParent())) {
-                hintBox.getProperties().put("alive", false);
-                hintBox.setVisible(false);
+        for (Node hint : hints) {
+            if (player.getHitBox().getBoundsInParent().intersects(hint.getBoundsInParent())) {
+                hint.getProperties().put("alive", false);
                 hintPoints++;
                 hintPointsTxt.setText(String.valueOf(hintPoints));
+            }
+        }
+
+        for (Iterator<Node> it = hints.iterator(); it.hasNext(); ) {
+            Node coin = it.next();
+            if (!(Boolean) coin.getProperties().get("alive")) {
+                it.remove();
+                gameRoot.getChildren().remove(coin);
             }
         }
     }
@@ -173,34 +242,42 @@ public class MainApp extends Application {
                 }
             }
             player.getHitBox().setTranslateX(player.getHitBox().getTranslateX() + (movingRight ? 1 : -1));
+            player.getImage().setTranslateX(player.getImage().getTranslateX() + (movingRight ? 1 : -1));
         }
     }
 
     private void movePlayerY(int value) {
         boolean movingDown = value > 0;
+
         for (int i = 0; i < Math.abs(value); i++) {
             for (Node platform : platforms) {
                 if (player.getHitBox().getBoundsInParent().intersects(platform.getBoundsInParent())) {
                     if (movingDown) {
                         if (player.getHitBox().getTranslateY() + 40 == platform.getTranslateY()) {
                             player.getHitBox().setTranslateY(player.getHitBox().getTranslateY() - 1);
+                            player.getImage().setTranslateY(player.getImage().getTranslateY() - 1);
+                            playerVelocity = new Point2D(playerVelocity.getX(), 0);  // stop downward velocity on collision
                             canJump = true;
                             return;
                         }
                     } else {
                         if (player.getHitBox().getTranslateY() == platform.getTranslateY() + 60) {
+                            player.getHitBox().setTranslateY(player.getHitBox().getTranslateY() + 1);
+                            player.getImage().setTranslateY(player.getImage().getTranslateY() + 1);
+                            playerVelocity = new Point2D(playerVelocity.getX(), 0);  // stop upward velocity on collision
                             return;
                         }
                     }
                 }
             }
             player.getHitBox().setTranslateY(player.getHitBox().getTranslateY() + (movingDown ? 1 : -1));
+            player.getImage().setTranslateY(player.getImage().getTranslateY() + (movingDown ? 1 : -1));
         }
     }
 
     private void jumpPlayer() {
         if (canJump) {
-            playerVelocity = playerVelocity.add(0, -30);
+            playerVelocity = playerVelocity.add(0, -20);
             canJump = false;
         }
     }
