@@ -30,13 +30,31 @@ public class Tiles {
 
         switch (type) {
             case 1:
-                image = new Image("IndustrialTile_59.png");
+                image = new Image("background-tile.png");
                 break;
             case 2:
                 image = new Image("mysteryQ.png");
                 break;
             case 3:
                 image = new Image("hint.png");
+                break;
+            case 4:
+                image = new Image("top-left.png");
+                break;
+            case 5:
+                image = new Image("top-center.png");
+                break;
+            case 6:
+                image = new Image("top-right.png");
+                break;
+            case 7:
+                image = new Image("bottom-right.png");
+                break;
+            case 8:
+                image = new Image("bottom-center.png");
+                break;
+            case 9:
+                image = new Image("bottom-left.png");
                 break;
         }
 
