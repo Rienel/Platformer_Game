@@ -1,0 +1,17 @@
+@font-face {
+    font-family: "Retro Gaming";
+    src: url('@../../../Retro-Gaming.ttf');
+}
+
+.label {
+    -fx-font-family: "Retro Gaming";
+    -fx-font-size: 15px;
+}
+
+
+.custom-button {
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+}
+

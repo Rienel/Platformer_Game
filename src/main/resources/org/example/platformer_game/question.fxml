@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="org.example.platformer_game.GameDialogController">
-    <Text fx:id="textQuestion" />
+<VBox alignment="CENTER" spacing="20" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.platformer_game.QuestionController">
+    <Label fx:id="textQuestion" />
     <TextField fx:id="fieldAnswer" />
-    <Text fx:id="hintBox" visible="false" />
-    <Text fx:id="answerBox" visible="false" />
-    <Button onAction="#handleSubmit" prefHeight="23.0" prefWidth="87.0" text="Submit" />
-    <Button onAction="#handleHint" text="Hint" />
+    <Label fx:id="answerBox" visible="false" />
+    <Label fx:id="hintBox" visible="false" />
+    <Button text="Submit" onAction="#handleSubmit" />
+    <Button text="Hint" onAction="#handleHint" />
 </VBox>
