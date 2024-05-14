@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.platformer_game.MainApp">
+    <children>
+        <Button alignment="TOP_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="EXIT GAME" textAlignment="CENTER">
+            <VBox.margin>
+                <Insets right="50.0" top="50.0" />
+            </VBox.margin>
+        </Button>
+        <VBox alignment="CENTER" prefHeight="278.0" prefWidth="1288.0" spacing="50.0">
+            <children>
+                <Button fx:id="lvlOneButton" mnemonicParsing="false" onAction="#MainApp" text="LEVEL 1" />
+                <Button mnemonicParsing="false" text="LEVEL 2" />
+                <Button mnemonicParsing="false" text="LEVEL 3" />
+            </children>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+            <padding>
+                <Insets bottom="100.0" top="100.0" />
+            </padding>
+        </VBox>
+    </children>
+</VBox>

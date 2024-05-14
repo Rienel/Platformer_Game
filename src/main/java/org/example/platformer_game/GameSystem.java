@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -22,7 +21,6 @@ public class GameSystem extends Application {
 //        stage.setFullScreen(true);
         stage.show();
     }
-
 
     public static void main(String[] args) {
         launch();

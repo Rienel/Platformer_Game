@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="org.example.platformer_game.GameDialogController">
+    <Text fx:id="textQuestion" />
+    <TextField fx:id="fieldAnswer" />
+    <Text fx:id="hintBox" visible="false" />
+    <Text fx:id="answerBox" visible="false" />
+    <Button onAction="#handleSubmit" prefHeight="23.0" prefWidth="87.0" text="Submit" />
+    <Button onAction="#handleHint" text="Hint" />
+</VBox>

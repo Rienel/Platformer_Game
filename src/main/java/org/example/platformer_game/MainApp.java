@@ -1,11 +1,13 @@
 package org.example.platformer_game;
 
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,9 +16,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-public class MainApp extends Application {
+public class MainApp {
+    @FXML
+    private Button lvlOneButton;
 
     private final HashMap<KeyCode, Boolean> keys = new HashMap<>();
     private final ArrayList<Node> platforms = new ArrayList<>();
@@ -97,7 +103,7 @@ public class MainApp extends Application {
                         tile = new Tiles(j * 60, i * 60, 60, 60, 4);
                         platforms.add(tile.getHitBox());
                         gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                            break;
+                        break;
                     case '5':
                         tile = new Tiles(j * 60, i * 60, 60, 60, 5);
                         platforms.add(tile.getHitBox());
@@ -133,7 +139,7 @@ public class MainApp extends Application {
                         platforms.add(tile.getHitBox());
                         gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
                         break;
-                        //u ,i ,j ,k for the corners i visualize lng gi tupad ra nako
+                    //u ,i ,j ,k for the corners i visualize lng gi tupad ra nako
                     case 'u':
                         tile = new Tiles(j * 60, i * 60, 60, 60, 13);
                         platforms.add(tile.getHitBox());
@@ -321,21 +327,18 @@ public class MainApp extends Application {
         return keys.getOrDefault(key, false);
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
+    @FXML
+    private void MainApp(ActionEvent actionEvent) throws IOException {
         initContent();
 
+        Stage stage = (Stage) lvlOneButton.getScene().getWindow();
         Scene scene = new Scene(appRoot);
-        scene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
-        scene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
+        scene.setOnKeyPressed(event -> keys.put(event.getCode(),true));
+        scene.setOnKeyReleased(event -> keys.put(event.getCode(),false));
         stage.setScene(scene);
         stage.show();
 
         Platform.runLater(this::runGameLoop);
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 
     public static void setRunning(boolean running) {

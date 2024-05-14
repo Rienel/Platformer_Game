@@ -98,7 +98,7 @@ public class GameController {
                 Stage Login = (Stage) scene.getWindow();
                 Login.close();
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("Level.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("level-ui.fxml"));
                 Parent root = loader.load();
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root, 1280, 720));
