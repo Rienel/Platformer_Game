@@ -21,9 +21,12 @@ public class Player {
     }
 
     public Player(int x, int y, int w, int h) {
-        image = new Image("PunkRun.png");
+        image = new Image("Punk.png");
 
         imageView = new ImageView(image);
+        imageView = new ImageView(image);
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(150);
 
         this.x = x;
         this.y = y;
@@ -34,14 +37,14 @@ public class Player {
         hitBox.setFill(Color.TRANSPARENT);
 
         hitBox.setStrokeWidth(1);
-        hitBox.setStroke(Color.BLUE);
+        hitBox.setStroke(Color.RED);
 
         hitBox.setTranslateX(x);
         hitBox.setTranslateY(y);
 
         // pra mo saka gamay
         imageView.setTranslateX(x);
-        imageView.setTranslateY(y - (double) h / 5);
+        imageView.setTranslateY(y - (double) h / 0.8);
 
     }
 }

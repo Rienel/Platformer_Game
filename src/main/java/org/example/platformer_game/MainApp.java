@@ -45,6 +45,7 @@ public class MainApp {
     private Point2D playerVelocity = new Point2D(0, 0);
     private boolean canJump = true;
     private boolean onGround = true;
+    private boolean isJumping = false;
 
     private int levelWidth;
 
@@ -182,38 +183,46 @@ public class MainApp {
 
     private void update() {
         ImageView playerImageView = player.getImage();
-//        boolean OnGround = false;
 
         if (!isPressed(KeyCode.W) && !isPressed(KeyCode.A) && !isPressed(KeyCode.D)) {
-            startAnimation(playerImageView, "/idle.png", 4, 1, 4, 48, 80, 5);
+            startAnimation(playerImageView, "/idle.png", 1, 1, 1, 48, 80, 5);
         }
 
-        if (isPressed(KeyCode.W) && player.getHitBox().getTranslateY() >= 5 && canJump && onGround) {
+        if (isPressed(KeyCode.W) && player.getHitBox().getTranslateY() >= 5 && onGround) {
             jumpPlayer();
         }
+
         if (isPressed(KeyCode.A) && player.getHitBox().getTranslateX() >= 5) {
-            startAnimation(playerImageView, "/run.png", 6, 1, 6, 48, 80, 5);
+            startAnimation(playerImageView, "/run.png", 1, 1, 1, 288, 8, 60);
             playerImageView.setScaleX(-1);
             movePlayerX(-5);
         }
+
         if (isPressed(KeyCode.D) && player.getHitBox().getTranslateX() + 40 <= levelWidth - 5) {
-            startAnimation(playerImageView, "/run.png", 6, 1, 6, 48, 80, 5);
+            startAnimation(playerImageView, "/run.png", 1, 1, 1, 288, 8, 60);
             playerImageView.setScaleX(1);
             movePlayerX(5);
         }
+
         if (playerVelocity.getY() < 10) {
             playerVelocity = playerVelocity.add(0, 1);
         }
 
         if (playerVelocity.getY() < 0) {
-            setFrame(playerImageView, "/jump.png", 4, 1, 4, 48, 80, 1, 1);
-        } else if (playerVelocity.getY() > 0 && !canJump) {
-            setFrame(playerImageView, "/jump.png", 4, 1, 4, 48, 80, 1, 2);
+            setFrame(playerImageView, "/jump.png", 1, 1, 2, 48, 80, 1, 1);
         }
 
         movePlayerY((int) playerVelocity.getY());
 
         handleInteractions();
+    }
+
+
+    private void jumpPlayer() {
+        if (onGround) {
+            playerVelocity = playerVelocity.add(0, -20);
+            onGround = false;
+        }
     }
 
     private void handleInteractions() {
@@ -292,7 +301,7 @@ public class MainApp {
                         if (player.getHitBox().getTranslateY() + 40 == platform.getTranslateY()) {
                             player.getHitBox().setTranslateY(player.getHitBox().getTranslateY() - 1);
                             player.getImage().setTranslateY(player.getImage().getTranslateY() - 1);
-                            playerVelocity = new Point2D(playerVelocity.getX(), 0);  // stop downward velocity on collision
+                            playerVelocity = new Point2D(playerVelocity.getX(), 0);
                             canJump = true;
                             onGround = true;
                             return;
@@ -301,7 +310,7 @@ public class MainApp {
                         if (player.getHitBox().getTranslateY() == platform.getTranslateY() + 60) {
                             player.getHitBox().setTranslateY(player.getHitBox().getTranslateY() + 1);
                             player.getImage().setTranslateY(player.getImage().getTranslateY() + 1);
-                            playerVelocity = new Point2D(playerVelocity.getX(), 0);  // stop upward velocity on collision
+                            playerVelocity = new Point2D(playerVelocity.getX(), 0);
                             return;
                         }
                     }
@@ -312,13 +321,6 @@ public class MainApp {
         }
 
         if (!movingDown && !onGround) {
-            canJump = false;
-        }
-    }
-
-    private void jumpPlayer() {
-        if (canJump) {
-            playerVelocity = playerVelocity.add(0, -20);
             canJump = false;
         }
     }

@@ -17,7 +17,7 @@ public class Animation extends AnimationTimer {
 
     private int currentFrame = 0;
     private long lastFrameTime = 0;
-    private long frameDuration;
+    private final long frameDuration;
 
     public Animation(ImageView imageView, Image image, int columns, int rows, int totalFrames, int frameWidth, int frameHeight, float framesPerSecond) {
         this.imageView = imageView;
@@ -31,7 +31,6 @@ public class Animation extends AnimationTimer {
         this.frameHeight = frameHeight;
         this.fps = framesPerSecond;
         this.frameDuration = (long) (1_000_000_000 / fps);
-
         this.lastFrameTime = System.nanoTime();
     }
 
