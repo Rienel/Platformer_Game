@@ -39,7 +39,9 @@ public class Player {
         hitBox.setTranslateX(x);
         hitBox.setTranslateY(y);
 
+        // pra mo saka gamay
         imageView.setTranslateX(x);
-        imageView.setTranslateY(y);
+        imageView.setTranslateY(y - (double) h / 5);
+
     }
 }
