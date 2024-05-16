@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -100,10 +101,18 @@ public class GameController {
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("level-ui.fxml"));
                 Parent root = loader.load();
+                Scene newScene = new Scene(root, 1280, 720);
+
+                // Add the stylesheet to the Scene
+                newScene.getStylesheets().addAll(getClass().getClassLoader().getResource("style.css").toExternalForm());
+
+                // Create the Stage
                 Stage stage = new Stage();
-                stage.setScene(new Scene(root, 1280, 720));
-//                stage.setFullScreen(true);
-//                stage.setFullScreenExitHint("");
+
+                // Set the Scene on the Stage
+                stage.setScene(newScene);
+
+                // Show the Stage
                 stage.show();
             }
         } catch (SQLException | IOException e) {

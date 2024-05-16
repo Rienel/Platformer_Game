@@ -4,18 +4,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.platformer_game.MainApp">
+<VBox id="lvlbg" alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.platformer_game.MainApp">
     <children>
-        <Button alignment="TOP_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="EXIT GAME" textAlignment="CENTER">
+        <Button fx:id="logoutButton" styleClass="level-button" maxHeight="550.0" maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#GameSystem" prefHeight="71.0" prefWidth="200.0" text="LOG OUT">
             <VBox.margin>
                 <Insets right="50.0" top="50.0" />
             </VBox.margin>
         </Button>
         <VBox alignment="CENTER" prefHeight="278.0" prefWidth="1288.0" spacing="50.0">
             <children>
-                <Button fx:id="lvlOneButton" mnemonicParsing="false" onAction="#MainApp" text="LEVEL 1" />
-                <Button mnemonicParsing="false" text="LEVEL 2" />
-                <Button mnemonicParsing="false" text="LEVEL 3" />
+                <Button fx:id="lvlOneButton" styleClass="level-button" layoutX="237.0" layoutY="218.0" maxHeight="550.0" maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#MainApp" prefHeight="71.0" prefWidth="200.0" text="LEVEL 1" />
+                <Button fx:id="lvlTwoButton" styleClass="level-button" maxHeight="550.0" maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="71.0" prefWidth="200.0" text="LEVEL 2" />
+                <Button fx:id="lvlThreeButton" styleClass="level-button" maxHeight="550.0" maxWidth="200.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="71.0" prefWidth="200.0" text="LEVEL 3" />
             </children>
             <VBox.margin>
                 <Insets />

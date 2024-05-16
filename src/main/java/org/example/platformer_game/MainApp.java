@@ -4,8 +4,10 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,6 +25,9 @@ import java.util.Iterator;
 public class MainApp {
     @FXML
     private Button lvlOneButton;
+
+    @FXML
+    private Button logoutButton;
 
     private final HashMap<KeyCode, Boolean> keys = new HashMap<>();
 
@@ -250,14 +255,36 @@ public class MainApp {
     private void MainApp(ActionEvent actionEvent) throws IOException {
         initContent();
 
+        Scene scene = ((Node) actionEvent.getSource()).getScene();
+        Stage Login = (Stage) scene.getWindow();
+        Login.close();
+
+
         Stage stage = (Stage) lvlOneButton.getScene().getWindow();
-        Scene scene = new Scene(appRoot);
+        scene = new Scene(appRoot);
         scene.setOnKeyPressed(event -> keys.put(event.getCode(),true));
         scene.setOnKeyReleased(event -> keys.put(event.getCode(),false));
         stage.setScene(scene);
         stage.show();
 
         Platform.runLater(this::runGameLoop);
+    }
+
+    @FXML
+    private void GameSystem(ActionEvent actionEvent) throws IOException {
+        Scene scene = ((Node) actionEvent.getSource()).getScene();
+        Stage Login = (Stage) scene.getWindow();
+        Login.close();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(GameSystem.class.getResource("login.fxml"));
+        Parent root = fxmlLoader.load();
+        scene = new Scene(root, 1280, 720);
+        Stage stage = (Stage) logoutButton.getScene().getWindow();
+        stage.setScene(scene);
+
+        //para di mu resize ang window
+        stage.setResizable(false);
+        stage.show();
     }
 
     public static void setRunning(boolean running) {
