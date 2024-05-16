@@ -17,20 +17,17 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class MainApp {
     @FXML
     private Button lvlOneButton;
 
     private final HashMap<KeyCode, Boolean> keys = new HashMap<>();
-    private final ArrayList<Node> platforms = new ArrayList<>();
-    private final ArrayList<Node> mysteryQ = new ArrayList<>();
-    private final ArrayList<Node> hints = new ArrayList<>();
 
     private final Pane appRoot = new Pane();
-    private final Pane gameRoot = new Pane();
+    public static final Pane gameRoot = new Pane();
     private final Pane uiRoot = new Pane();
 
     private final GameDialog dialog = new GameDialog();
@@ -45,20 +42,16 @@ public class MainApp {
     private Point2D playerVelocity = new Point2D(0, 0);
     private boolean canJump = true;
     private boolean onGround = true;
-    private boolean isJumping = false;
+
+    private MapGenerator mapGenerator = new MapGenerator();
 
     private int levelWidth;
 
     private boolean dialogEvent = false;
     private static boolean running = true;
-    private Tiles tile;
+    public static Tiles tile;
 
     private void initContent() {
-        Image bgk = new Image("background-img.png");
-        ImageView bg = new ImageView(bgk);
-
-        bg.setFitHeight(LevelData.LEVEL_ONE.length * 60);
-        bg.setFitWidth(1280);
 
         hintPointsTxt.setText(String.valueOf(hintPoints));
         hintPointsTxt.setPrefHeight(hintPointsTxt.getFont().getSize());
@@ -75,99 +68,7 @@ public class MainApp {
         scoreTxt.setLayoutY(60);
 
         levelWidth = LevelData.LEVEL_ONE[0].length() * 60;
-
-        for (int i = 0; i < LevelData.LEVEL_ONE.length; i++) {
-            String line = LevelData.LEVEL_ONE[i];
-            for (int j = 0; j < line.length(); j++) {
-                switch (line.charAt(j)) {
-                    case '0':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 1);
-                        gameRoot.getChildren().addAll(tile.getImageView());
-                        break;
-                    case '1':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 10);
-                        gameRoot.getChildren().addAll(tile.getImageView());
-                        break;
-                    case '2':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 2);
-                        mysteryQ.add(tile.getHitBox());
-                        mysteryQ.add(tile.getImageView());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    case '3':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 3);
-                        hints.add(tile.getHitBox());
-                        hints.add(tile.getImageView());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    case '4':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 4);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    case '5':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 5);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    case '6':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 6);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    case '7':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 7);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    case '8':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 8);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    case '9':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 9);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    case 'l':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 11);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    case 'r':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 12);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    //u ,i ,j ,k for the corners i visualize lng gi tupad ra nako
-                    case 'u':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 13);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    case 'i':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 14);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    case 'j':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 15);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-                    case 'k':
-                        tile = new Tiles(j * 60, i * 60, 60, 60, 16);
-                        platforms.add(tile.getHitBox());
-                        gameRoot.getChildren().addAll(tile.getHitBox(), tile.getImageView());
-                        break;
-//                    default:
-//                        tile = new Tiles(j * 60, i * 60, 60, 60, 1);
-//                        gameRoot.getChildren().addAll(tile.getImageView());
-//                        break;
-                }
-            }
-        }
+        mapGenerator.run();
 
         gameRoot.getChildren().addAll(player.getHitBox(), player.getImage());
 
@@ -178,7 +79,7 @@ public class MainApp {
             }
         });
 
-        appRoot.getChildren().addAll(bg, gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+        appRoot.getChildren().addAll(mapGenerator.setBg(),gameRoot, uiRoot, scoreTxt, hintPointsTxt);
     }
 
     private void update() {
@@ -213,10 +114,9 @@ public class MainApp {
         }
 
         movePlayerY((int) playerVelocity.getY());
-
         handleInteractions();
+        dialog.setCorrect(false);
     }
-
 
     private void jumpPlayer() {
         if (onGround) {
@@ -226,33 +126,50 @@ public class MainApp {
     }
 
     private void handleInteractions() {
-        for (Node coin : mysteryQ) {
-            if (player.getHitBox().getBoundsInParent().intersects(coin.getBoundsInParent())) {
+        for (Node QBox : mapGenerator.getMysteryQ()) {
+            if (player.getHitBox().getBoundsInParent().intersects(QBox.getBoundsInParent())) {
                 if (isPressed(KeyCode.E)) {
-                    if ((boolean) coin.getProperties().get("alive")) {
+                    if ((boolean) QBox.getProperties().get("alive")) {
                         dialogEvent = true;
                         running = false;
                     }
                 }
                 if (dialog.isCorrect()) {
-                    gameRoot.getChildren().remove(coin);
+                    gameRoot.getChildren().remove(QBox);
                     gameRoot.getChildren().remove(tile.getImageView());
-                    coin.getProperties().put("alive", false);
-                    score++;
+                    QBox.getProperties().put("alive", false);
                     scoreTxt.setText(String.valueOf(score));
                 }
             }
         }
 
-        for (Node coin : hints) {
-            if (player.getHitBox().getBoundsInParent().intersects(coin.getBoundsInParent())) {
-                gameRoot.getChildren().remove(coin);
-                gameRoot.getChildren().remove(tile.getImageView());
-                coin.getProperties().put("alive", false);
+        for(Iterator<Node> it = mapGenerator.getMysteryQ().iterator(); it.hasNext();){
+            Node coin = it.next();
+            if(dialog.isCorrect()) {
+                if (!(Boolean) coin.getProperties().get("alive")) {
+                    it.remove();
+                    gameRoot.getChildren().remove(coin);
+                }
+            }
+        }
+
+        for (Node hintBox : mapGenerator.getHints()) {
+            if (player.getHitBox().getBoundsInParent().intersects(hintBox.getBoundsInParent())) {
+                hintBox.getProperties().put("alive", false);
+
                 hintPoints++;
                 hintPointsTxt.setText(String.valueOf(hintPoints));
             }
         }
+
+        for(Iterator<Node> it = mapGenerator.getHints().iterator(); it.hasNext();){
+            Node hintBox = it.next();
+            if(!(Boolean)hintBox.getProperties().get("alive")){
+                it.remove();
+                gameRoot.getChildren().remove(hintBox);
+            }
+        }
+
     }
 
     private void startAnimation(ImageView imageView, String imagePath, int columns, int rows, int totalFrames, int frameWidth, int frameHeight, float fps) {
@@ -269,7 +186,7 @@ public class MainApp {
         boolean movingRight = value > 0;
 
         for (int i = 0; i < Math.abs(value); i++) {
-            for (Node platform : platforms) {
+            for (Node platform : mapGenerator.getPlatforms()) {
                 if (player.getHitBox().getBoundsInParent().intersects(platform.getBoundsInParent())) {
                     if (movingRight) {
                         if (player.getHitBox().getTranslateX() + 40 == platform.getTranslateX()) {
@@ -295,7 +212,7 @@ public class MainApp {
         boolean movingDown = value > 0;
 
         for (int i = 0; i < Math.abs(value); i++) {
-            for (Node platform : platforms) {
+            for (Node platform : mapGenerator.getPlatforms()) {
                 if (player.getHitBox().getBoundsInParent().intersects(platform.getBoundsInParent())) {
                     if (movingDown) {
                         if (player.getHitBox().getTranslateY() + 40 == platform.getTranslateY()) {

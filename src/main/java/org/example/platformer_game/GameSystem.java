@@ -16,9 +16,9 @@ public class GameSystem extends Application {
         Scene scene = new Scene(root, 1280, 720);
         stage.setTitle("Register");
         stage.setScene(scene);
-        // Pra full screen
-//        stage.setFullScreenExitHint("");
-//        stage.setFullScreen(true);
+
+        //para di mu resize ang window
+        stage.setResizable(false);
         stage.show();
     }
 

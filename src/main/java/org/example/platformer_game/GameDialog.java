@@ -20,7 +20,7 @@ public class GameDialog extends Stage {
     private Text hintBox = new Text();
     private Text answerBox = new Text();
 
-    private ArrayList<Object[]> questions = new Question().getQuestions();
+    private ArrayList<Object[]> questions = new Question().getQuestions(1);
 
     private boolean correct = false;
 
@@ -94,7 +94,6 @@ public class GameDialog extends Stage {
                 count++;
             }
         }
-
         System.out.println(Arrays.toString(randomQ));
     }
 
