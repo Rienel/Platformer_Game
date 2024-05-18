@@ -18,6 +18,7 @@ public class Animation extends AnimationTimer {
     private int currentFrame = 0;
     private long lastFrameTime = 0;
     private final long frameDuration;
+    private String imagePath;
 
     public Animation(ImageView imageView, Image image, int columns, int rows, int totalFrames, int frameWidth, int frameHeight, float framesPerSecond) {
         this.imageView = imageView;
@@ -32,6 +33,7 @@ public class Animation extends AnimationTimer {
         this.fps = framesPerSecond;
         this.frameDuration = (long) (1_000_000_000 / fps);
         this.lastFrameTime = System.nanoTime();
+        this.imagePath = image.getUrl();
     }
 
     @Override
@@ -53,5 +55,9 @@ public class Animation extends AnimationTimer {
         int y = (currentFrame / cols) * frameHeight;
 
         imageView.setViewport(new Rectangle2D(x, y, frameWidth, frameHeight));
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }

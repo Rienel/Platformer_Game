@@ -25,7 +25,6 @@ import java.util.Iterator;
 public class MainApp {
     @FXML
     private Button lvlOneButton;
-
     @FXML
     private Button logoutButton;
 
@@ -91,7 +90,7 @@ public class MainApp {
         ImageView playerImageView = player.getImage();
 
         if (!isPressed(KeyCode.W) && !isPressed(KeyCode.A) && !isPressed(KeyCode.D)) {
-            startAnimation(playerImageView, "/idle.png", 1, 1, 1, 48, 80, 5);
+            startAnimation(playerImageView, "/idle.png", 4, 1, 4, 48, 80, 5);
         }
 
         if (isPressed(KeyCode.W) && player.getHitBox().getTranslateY() >= 5 && onGround) {
@@ -99,13 +98,13 @@ public class MainApp {
         }
 
         if (isPressed(KeyCode.A) && player.getHitBox().getTranslateX() >= 5) {
-            startAnimation(playerImageView, "/run.png", 1, 1, 1, 288, 8, 60);
+            startAnimation(playerImageView, "/run.png", 6, 1, 6, 48, 80, 10);
             playerImageView.setScaleX(-1);
             movePlayerX(-5);
         }
 
         if (isPressed(KeyCode.D) && player.getHitBox().getTranslateX() + 40 <= levelWidth - 5) {
-            startAnimation(playerImageView, "/run.png", 1, 1, 1, 288, 8, 60);
+            startAnimation(playerImageView, "/run.png", 6, 1, 6, 48, 80, 10);
             playerImageView.setScaleX(1);
             movePlayerX(5);
         }
@@ -115,13 +114,31 @@ public class MainApp {
         }
 
         if (playerVelocity.getY() < 0) {
-            setFrame(playerImageView, "/jump.png", 1, 1, 2, 48, 80, 1, 1);
+            setFrame(playerImageView, "/jump.png", 2, 1, 2, 48, 80, 1, 1);
         }
 
         movePlayerY((int) playerVelocity.getY());
         handleInteractions();
         dialog.setCorrect(false);
     }
+
+    private void startAnimation(ImageView imageView, String imagePath, int columns, int rows, int totalFrames, int frameWidth, int frameHeight, float fps) {
+        Animation animation = (Animation) imageView.getProperties().get("currentAnimation");
+        if (animation == null || !animation.getImagePath().equals(imagePath)) {
+            if (animation != null) {
+                animation.stop();
+            }
+            animation = new Animation(imageView, new Image(imagePath), columns, rows, totalFrames, frameWidth, frameHeight, fps);
+            imageView.getProperties().put("currentAnimation", animation);
+            animation.start();
+        }
+    }
+
+    private void setFrame(ImageView imageView, String imagePath, int columns, int rows, int totalFrames, int frameWidth, int frameHeight, float fps, int frame) {
+        Animation animation = new Animation(imageView, new Image(imagePath), columns, rows, totalFrames, frameWidth, frameHeight, fps);
+        animation.setFrame(frame);
+    }
+
 
     private void jumpPlayer() {
         if (onGround) {
@@ -174,17 +191,6 @@ public class MainApp {
                 gameRoot.getChildren().remove(hintBox);
             }
         }
-
-    }
-
-    private void startAnimation(ImageView imageView, String imagePath, int columns, int rows, int totalFrames, int frameWidth, int frameHeight, float fps) {
-        Animation animation = new Animation(imageView, new Image(imagePath), columns, rows, totalFrames, frameWidth, frameHeight, fps);
-        animation.start();
-    }
-
-    private void setFrame(ImageView imageView, String imagePath, int columns, int rows, int totalFrames, int frameWidth, int frameHeight, float fps, int frame) {
-        Animation animation = new Animation(imageView, new Image(imagePath), columns, rows, totalFrames, frameWidth, frameHeight, fps);
-        animation.setFrame(frame);
     }
 
     private void movePlayerX(int value) {
