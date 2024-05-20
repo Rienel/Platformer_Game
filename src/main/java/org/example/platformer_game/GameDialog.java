@@ -61,6 +61,7 @@ public class GameDialog extends Stage {
                     }
                 }
                 MainApp.hintPoints--;
+                MainApp.hintPointsTxt.setText(String.valueOf(MainApp.hintPoints));
             }else{
                 hintBox.setText("Low on Hint Points");
             }

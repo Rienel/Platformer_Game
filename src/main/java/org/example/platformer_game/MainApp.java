@@ -36,6 +36,8 @@ public class MainApp {
 
     private final GameDialog dialog = new GameDialog();
 
+    private final ExitDialog exdialog = new ExitDialog();
+
     public static int hintPoints = 0;
     public static int score = 0;
 
@@ -54,6 +56,18 @@ public class MainApp {
     private boolean dialogEvent = false;
     private static boolean running = true;
     public static Tiles tile;
+
+    private int counter = 0;
+
+    private boolean exdialogbool = false;
+    private Scene scene;
+
+    public MainApp() {
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
 
     private void initContent() {
 
@@ -165,6 +179,17 @@ public class MainApp {
             }
         }
 
+        if(dialog.isCorrect()){
+            if(counter == 3){
+                System.out.println("Done");
+                exdialog.open();
+                running = false;
+            }else{
+                counter++;
+                System.out.println("ctr " + counter);
+            }
+        }
+
         for(Iterator<Node> it = mapGenerator.getMysteryQ().iterator(); it.hasNext();){
             Node coin = it.next();
             if(dialog.isCorrect()) {
@@ -178,7 +203,6 @@ public class MainApp {
         for (Node hintBox : mapGenerator.getHints()) {
             if (player.getHitBox().getBoundsInParent().intersects(hintBox.getBoundsInParent())) {
                 hintBox.getProperties().put("alive", false);
-
                 hintPoints++;
                 hintPointsTxt.setText(String.valueOf(hintPoints));
             }
@@ -257,14 +281,14 @@ public class MainApp {
         return keys.getOrDefault(key, false);
     }
 
+
     @FXML
     private void MainApp(ActionEvent actionEvent) throws IOException {
         initContent();
 
-        Scene scene = ((Node) actionEvent.getSource()).getScene();
+        scene = ((Node) actionEvent.getSource()).getScene();
         Stage Login = (Stage) scene.getWindow();
         Login.close();
-
 
         Stage stage = (Stage) lvlOneButton.getScene().getWindow();
         scene = new Scene(appRoot);
@@ -305,6 +329,39 @@ public class MainApp {
                 if (running) {
                     update();
                 }
+                if(counter == 3){
+                    System.out.println("done");
+                    running = false;
+                    exdialog.open();
+
+                    exdialog.setOnCloseRequest(event -> {
+                        System.out.println("Closed");
+                    });
+                    counter=0;
+                    exdialog.btnmenu.setOnAction(event -> {
+                        Stage stage1 = (Stage) scene.getWindow();
+                        stage1.close();
+                        Scene scene = ((Node) event.getSource()).getScene();
+                        exdialog.close();
+
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("level-ui.fxml"));
+                        Parent root = null;
+                        try {
+                            root = loader.load();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        Scene newScene = new Scene(root, 1280, 720);
+
+                        newScene.getStylesheets().addAll(getClass().getClassLoader().getResource("style.css").toExternalForm());
+                        Stage stage = new Stage();
+                        stage.setScene(newScene);
+                        stage.show();
+
+                    });
+
+                }
+
                 if (dialogEvent) {
                     dialogEvent = false;
                     keys.keySet().forEach(key -> keys.put(key, false));
