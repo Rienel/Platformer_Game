@@ -26,6 +26,13 @@ import java.util.Iterator;
 public class MainApp {
     @FXML
     private Button lvlOneButton;
+
+    @FXML
+    private Button lvlTwoButton;
+
+    @FXML
+    private Button lvlThreeButton;
+
     @FXML
     private Button logoutButton;
 
@@ -70,7 +77,7 @@ public class MainApp {
         return scene;
     }
 
-    private void initContent() {
+    private void levelOneInitContent() {
 
         Rectangle board = new Rectangle(200,100,Color.WHITESMOKE);
         board.setLayoutY(25);
@@ -95,6 +102,7 @@ public class MainApp {
 
 
         levelWidth = LevelData.LEVEL_ONE[0].length() * 60;
+        mapGenerator.setLevel(1);
         mapGenerator.run();
 
         gameRoot.getChildren().addAll(player.getHitBox(), player.getImage());
@@ -106,7 +114,87 @@ public class MainApp {
             }
         });
 
-        appRoot.getChildren().addAll(mapGenerator.setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+        appRoot.getChildren().addAll(mapGenerator.lvl1setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+    }
+
+    private void levelTwoInitContent() {
+
+        Rectangle board = new Rectangle(200,100,Color.WHITESMOKE);
+        board.setLayoutY(25);
+        board.setLayoutX(25);
+
+        hintPointsTxt.setText(String.valueOf(hintPoints));
+
+
+        hintPointsTxt.setPrefHeight(hintPointsTxt.getFont().getSize());
+        hintPointsTxt.setPrefWidth(hintPointsTxt.getFont().getSize());
+        hintPointsTxt.setTextFill(Color.BLACK);
+        hintPointsTxt.setLayoutX(30);
+        hintPointsTxt.setLayoutY(30);
+
+        scoreTxt.setText(String.valueOf(score));
+        scoreTxt.setPrefHeight(scoreTxt.getFont().getSize());
+        scoreTxt.setPrefWidth(scoreTxt.getFont().getSize());
+        scoreTxt.setTextFill(Color.BLACK);
+        scoreTxt.setLayoutX(30);
+        scoreTxt.setLayoutY(60);
+
+
+
+        levelWidth = LevelData.LEVEL_TWO[0].length() * 60;
+        mapGenerator.setLevel(2);
+        mapGenerator.run();
+
+        gameRoot.getChildren().addAll(player.getHitBox(), player.getImage());
+
+        player.getHitBox().translateXProperty().addListener((obs, old, newValue) -> {
+            int offset = newValue.intValue();
+            if (offset > 640 && offset < levelWidth - 640) {
+                gameRoot.setLayoutX(-(offset - 640));
+            }
+        });
+
+        appRoot.getChildren().addAll(mapGenerator.lvl2setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+    }
+
+    private void levelThreeInitContent() {
+
+        Rectangle board = new Rectangle(200,100,Color.WHITESMOKE);
+        board.setLayoutY(25);
+        board.setLayoutX(25);
+
+        hintPointsTxt.setText(String.valueOf(hintPoints));
+
+
+        hintPointsTxt.setPrefHeight(hintPointsTxt.getFont().getSize());
+        hintPointsTxt.setPrefWidth(hintPointsTxt.getFont().getSize());
+        hintPointsTxt.setTextFill(Color.BLACK);
+        hintPointsTxt.setLayoutX(30);
+        hintPointsTxt.setLayoutY(30);
+
+        scoreTxt.setText(String.valueOf(score));
+        scoreTxt.setPrefHeight(scoreTxt.getFont().getSize());
+        scoreTxt.setPrefWidth(scoreTxt.getFont().getSize());
+        scoreTxt.setTextFill(Color.BLACK);
+        scoreTxt.setLayoutX(30);
+        scoreTxt.setLayoutY(60);
+
+
+
+        levelWidth = LevelData.LEVEL_THREE[0].length() * 60;
+        mapGenerator.setLevel(3);
+        mapGenerator.run();
+
+        gameRoot.getChildren().addAll(player.getHitBox(), player.getImage());
+
+        player.getHitBox().translateXProperty().addListener((obs, old, newValue) -> {
+            int offset = newValue.intValue();
+            if (offset > 640 && offset < levelWidth - 640) {
+                gameRoot.setLayoutX(-(offset - 640));
+            }
+        });
+
+        appRoot.getChildren().addAll(mapGenerator.lvl3setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
     }
 
     private void update() {
@@ -290,16 +378,51 @@ public class MainApp {
         return keys.getOrDefault(key, false);
     }
 
-
     @FXML
-    private void MainApp(ActionEvent actionEvent) throws IOException {
-        initContent();
+    private void levelOne(ActionEvent actionEvent) throws IOException {
+        levelOneInitContent();
 
         scene = ((Node) actionEvent.getSource()).getScene();
         Stage Login = (Stage) scene.getWindow();
         Login.close();
 
         Stage stage = (Stage) lvlOneButton.getScene().getWindow();
+        scene = new Scene(appRoot);
+        scene.setOnKeyPressed(event -> keys.put(event.getCode(),true));
+        scene.setOnKeyReleased(event -> keys.put(event.getCode(),false));
+        stage.setScene(scene);
+        stage.show();
+        stage.setResizable(false);
+        Platform.runLater(this::runGameLoop);
+    }
+
+    @FXML
+    private void levelTwo(ActionEvent actionEvent) throws IOException {
+        levelTwoInitContent();
+
+        scene = ((Node) actionEvent.getSource()).getScene();
+        Stage Login = (Stage) scene.getWindow();
+        Login.close();
+
+        Stage stage = (Stage) lvlTwoButton.getScene().getWindow();
+        scene = new Scene(appRoot);
+        scene.setOnKeyPressed(event -> keys.put(event.getCode(),true));
+        scene.setOnKeyReleased(event -> keys.put(event.getCode(),false));
+        stage.setScene(scene);
+        stage.show();
+        stage.setResizable(false);
+        Platform.runLater(this::runGameLoop);
+    }
+
+    @FXML
+    private void levelThree(ActionEvent actionEvent) throws IOException {
+        levelThreeInitContent();
+
+        scene = ((Node) actionEvent.getSource()).getScene();
+        Stage Login = (Stage) scene.getWindow();
+        Login.close();
+
+        Stage stage = (Stage) lvlThreeButton.getScene().getWindow();
         scene = new Scene(appRoot);
         scene.setOnKeyPressed(event -> keys.put(event.getCode(),true));
         scene.setOnKeyReleased(event -> keys.put(event.getCode(),false));
