@@ -1,5 +1,6 @@
 package org.example.platformer_game;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -54,7 +55,7 @@ public class GameDialog extends Stage {
             int hintPoints = MainApp.hintPoints;
             System.out.println(hintPoints);
 
-            if(hintPoints>=2){
+            if(hintPoints>0){
                 for(Object[] question : questions) {
                     if(question[2].equals(randomNumber)){
                         hintBox.setText((String) question[2]);
@@ -71,6 +72,7 @@ public class GameDialog extends Stage {
 
         VBox vBox = new VBox(30,textQuestion,fieldAnswer,answerBox,hintBox,btnsubmit,btnhint);
         fieldAnswer.setVisible(true);
+        vBox.setPadding(new Insets(15));
         vBox.setAlignment(Pos.CENTER);
         Scene scene = new Scene(vBox);
         setScene(scene);
@@ -128,6 +130,7 @@ public class GameDialog extends Stage {
 
         setCorrect(false);
         ctr++;
+        this.setResizable(false);
         show();
     }
 

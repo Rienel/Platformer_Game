@@ -51,6 +51,7 @@ public class GameController {
             stage.setScene(new Scene(root, 1280, 720));
 //            stage.setFullScreen(true);
 //            stage.setFullScreenExitHint("");
+            stage.setResizable(false);
             stage.show();
 
         } catch (SQLException e) {
@@ -74,6 +75,7 @@ public class GameController {
         stage.setScene(new Scene(root, 1280, 720));
 //        stage.setFullScreen(true);
 //        stage.setFullScreenExitHint("");
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -113,6 +115,7 @@ public class GameController {
                 stage.setScene(newScene);
 
                 // Show the Stage
+                stage.setResizable(false);
                 stage.show();
             }
         } catch (SQLException | IOException e) {

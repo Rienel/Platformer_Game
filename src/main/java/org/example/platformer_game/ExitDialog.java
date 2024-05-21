@@ -2,6 +2,7 @@ package org.example.platformer_game;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -30,6 +31,7 @@ public class ExitDialog extends Stage {
         btnmenu = new Button("Go Back to Menu");
 
         VBox vBox = new VBox(30,textDialog,btnmenu);
+        vBox.setPadding(new Insets(15));
         vBox.setAlignment(Pos.CENTER);
         Scene scene = new Scene(vBox);
         setScene(scene);

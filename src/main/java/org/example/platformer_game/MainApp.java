@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -71,19 +72,27 @@ public class MainApp {
 
     private void initContent() {
 
+        Rectangle board = new Rectangle(200,100,Color.WHITESMOKE);
+        board.setLayoutY(25);
+        board.setLayoutX(25);
+
         hintPointsTxt.setText(String.valueOf(hintPoints));
+
+
         hintPointsTxt.setPrefHeight(hintPointsTxt.getFont().getSize());
         hintPointsTxt.setPrefWidth(hintPointsTxt.getFont().getSize());
-        hintPointsTxt.setTextFill(Color.GREEN);
+        hintPointsTxt.setTextFill(Color.BLACK);
         hintPointsTxt.setLayoutX(30);
         hintPointsTxt.setLayoutY(30);
 
         scoreTxt.setText(String.valueOf(score));
         scoreTxt.setPrefHeight(scoreTxt.getFont().getSize());
         scoreTxt.setPrefWidth(scoreTxt.getFont().getSize());
-        scoreTxt.setTextFill(Color.GREEN);
+        scoreTxt.setTextFill(Color.BLACK);
         scoreTxt.setLayoutX(30);
         scoreTxt.setLayoutY(60);
+
+
 
         levelWidth = LevelData.LEVEL_ONE[0].length() * 60;
         mapGenerator.run();
@@ -97,7 +106,7 @@ public class MainApp {
             }
         });
 
-        appRoot.getChildren().addAll(mapGenerator.setBg(),gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+        appRoot.getChildren().addAll(mapGenerator.setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
     }
 
     private void update() {
@@ -156,7 +165,7 @@ public class MainApp {
 
     private void jumpPlayer() {
         if (onGround) {
-            playerVelocity = playerVelocity.add(0, -20);
+            playerVelocity = playerVelocity.add(0, -22);
             onGround = false;
         }
     }
@@ -180,7 +189,7 @@ public class MainApp {
         }
 
         if(dialog.isCorrect()){
-            if(counter == 3){
+            if(counter == 10){
                 System.out.println("Done");
                 exdialog.open();
                 running = false;
@@ -296,7 +305,7 @@ public class MainApp {
         scene.setOnKeyReleased(event -> keys.put(event.getCode(),false));
         stage.setScene(scene);
         stage.show();
-
+        stage.setResizable(false);
         Platform.runLater(this::runGameLoop);
     }
 
@@ -329,7 +338,7 @@ public class MainApp {
                 if (running) {
                     update();
                 }
-                if(counter == 3){
+                if(counter == 10){
                     System.out.println("done");
                     running = false;
                     exdialog.open();
