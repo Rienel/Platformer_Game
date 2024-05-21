@@ -52,7 +52,6 @@ public class MainApp {
 
     private final Player player = new Player(70, 430, 40, 40);
     private Point2D playerVelocity = new Point2D(0, 0);
-    private boolean canJump = true;
     private boolean onGround = true;
 
     private MapGenerator mapGenerator = new MapGenerator();
@@ -189,16 +188,14 @@ public class MainApp {
     /* Another desperate attempt to implement the animation */
     // The attempt works holy jesus
     private void update() {
+
         if (!isPressed(KeyCode.W) && !isPressed(KeyCode.A) && !isPressed(KeyCode.D) && onGround) {
             player.animateIdle();
         }
 
         if (isPressed(KeyCode.W) && player.getHitBox().getTranslateY() >= 5 && onGround) {
             jumpPlayer();
-        }
-
-        // na human najd ang fall animation
-        if (!onGround && playerVelocity.getY() > 0) {
+        } else if (!onGround && playerVelocity.getY() > 0) {
             player.animateFall();
         }
 
@@ -206,6 +203,7 @@ public class MainApp {
             player.animateJump();
         }
 
+        // TODO find another implementation for reverse moving
         if (isPressed(KeyCode.A) && player.getHitBox().getTranslateX() >= 5) {
             player.animateRun();
             player.getImage().setScaleX(-1);
@@ -327,7 +325,6 @@ public class MainApp {
                             player.getHitBox().setTranslateY(player.getHitBox().getTranslateY() - 1);
                             player.getImage().setTranslateY(player.getHitBox().getTranslateY() - player.getImage().getFitHeight() + player.getHitBox().getHeight());
                             playerVelocity = new Point2D(playerVelocity.getX(), 0);
-                            canJump = true;
                             onGround = true;
                             return;
                         }
@@ -343,10 +340,6 @@ public class MainApp {
             }
             player.getHitBox().setTranslateY(player.getHitBox().getTranslateY() + (movingDown ? 1 : -1));
             player.getImage().setTranslateY(player.getHitBox().getTranslateY() - player.getImage().getFitHeight() + player.getHitBox().getHeight());
-        }
-
-        if (!movingDown && !onGround) {
-            canJump = false;
         }
     }
 

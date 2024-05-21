@@ -48,9 +48,6 @@ public class Player {
                 new Image("idle4.png")
         };
 
-
-        // wa pako kabaw unsaon ang jump ug fall animation
-        // na human na fall animation lets go
         jumpImages = new Image[]{
                 new Image("jump2.png")
         };
@@ -61,7 +58,7 @@ public class Player {
 
         imageView = new ImageView("Punk.png");
         imageView.setFitWidth(100);
-        imageView.setFitHeight(150);
+        imageView.setFitHeight(100);
 
         this.x = x;
         this.y = y;
@@ -77,7 +74,8 @@ public class Player {
         hitBox.setTranslateY(y);
 
         imageView.setTranslateX(x);
-        imageView.setTranslateY(y - h / 2.0);
+        imageView.setTranslateY(y);
+
     }
 
     private boolean shouldUpdateFrame() {
