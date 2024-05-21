@@ -11,8 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -85,7 +83,6 @@ public class MainApp {
 
         hintPointsTxt.setText(String.valueOf(hintPoints));
 
-
         hintPointsTxt.setPrefHeight(hintPointsTxt.getFont().getSize());
         hintPointsTxt.setPrefWidth(hintPointsTxt.getFont().getSize());
         hintPointsTxt.setTextFill(Color.BLACK);
@@ -98,8 +95,6 @@ public class MainApp {
         scoreTxt.setTextFill(Color.BLACK);
         scoreTxt.setLayoutX(30);
         scoreTxt.setLayoutY(60);
-
-
 
         levelWidth = LevelData.LEVEL_ONE[0].length() * 60;
         mapGenerator.setLevel(1);
@@ -125,7 +120,6 @@ public class MainApp {
 
         hintPointsTxt.setText(String.valueOf(hintPoints));
 
-
         hintPointsTxt.setPrefHeight(hintPointsTxt.getFont().getSize());
         hintPointsTxt.setPrefWidth(hintPointsTxt.getFont().getSize());
         hintPointsTxt.setTextFill(Color.BLACK);
@@ -138,8 +132,6 @@ public class MainApp {
         scoreTxt.setTextFill(Color.BLACK);
         scoreTxt.setLayoutX(30);
         scoreTxt.setLayoutY(60);
-
-
 
         levelWidth = LevelData.LEVEL_TWO[0].length() * 60;
         mapGenerator.setLevel(2);
@@ -165,7 +157,6 @@ public class MainApp {
 
         hintPointsTxt.setText(String.valueOf(hintPoints));
 
-
         hintPointsTxt.setPrefHeight(hintPointsTxt.getFont().getSize());
         hintPointsTxt.setPrefWidth(hintPointsTxt.getFont().getSize());
         hintPointsTxt.setTextFill(Color.BLACK);
@@ -178,8 +169,6 @@ public class MainApp {
         scoreTxt.setTextFill(Color.BLACK);
         scoreTxt.setLayoutX(30);
         scoreTxt.setLayoutY(60);
-
-
 
         levelWidth = LevelData.LEVEL_THREE[0].length() * 60;
         mapGenerator.setLevel(3);
@@ -197,26 +186,35 @@ public class MainApp {
         appRoot.getChildren().addAll(mapGenerator.lvl3setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
     }
 
+    /* Another desperate attempt to implement the animation */
+    // The attempt works holy jesus
     private void update() {
-        ImageView playerImageView = player.getImage();
-
-        if (!isPressed(KeyCode.W) && !isPressed(KeyCode.A) && !isPressed(KeyCode.D)) {
-            startAnimation(playerImageView, "/idle.png", 4, 1, 4, 48, 80, 5);
+        if (!isPressed(KeyCode.W) && !isPressed(KeyCode.A) && !isPressed(KeyCode.D) && onGround) {
+            player.animateIdle();
         }
 
         if (isPressed(KeyCode.W) && player.getHitBox().getTranslateY() >= 5 && onGround) {
             jumpPlayer();
         }
 
+        // na human najd ang fall animation
+        if (!onGround && playerVelocity.getY() > 0) {
+            player.animateFall();
+        }
+
+        if(!onGround) {
+            player.animateJump();
+        }
+
         if (isPressed(KeyCode.A) && player.getHitBox().getTranslateX() >= 5) {
-            startAnimation(playerImageView, "/run.png", 6, 1, 6, 48, 80, 10);
-            playerImageView.setScaleX(-1);
+            player.animateRun();
+            player.getImage().setScaleX(-1);
             movePlayerX(-5);
         }
 
         if (isPressed(KeyCode.D) && player.getHitBox().getTranslateX() + 40 <= levelWidth - 5) {
-            startAnimation(playerImageView, "/run.png", 6, 1, 6, 48, 80, 10);
-            playerImageView.setScaleX(1);
+            player.animateRun();
+            player.getImage().setScaleX(1);
             movePlayerX(5);
         }
 
@@ -224,32 +222,10 @@ public class MainApp {
             playerVelocity = playerVelocity.add(0, 1);
         }
 
-        if (playerVelocity.getY() < 0) {
-            setFrame(playerImageView, "/jump.png", 2, 1, 2, 48, 80, 1, 1);
-        }
-
         movePlayerY((int) playerVelocity.getY());
         handleInteractions();
         dialog.setCorrect(false);
     }
-
-    private void startAnimation(ImageView imageView, String imagePath, int columns, int rows, int totalFrames, int frameWidth, int frameHeight, float fps) {
-        Animation animation = (Animation) imageView.getProperties().get("currentAnimation");
-        if (animation == null || !animation.getImagePath().equals(imagePath)) {
-            if (animation != null) {
-                animation.stop();
-            }
-            animation = new Animation(imageView, new Image(imagePath), columns, rows, totalFrames, frameWidth, frameHeight, fps);
-            imageView.getProperties().put("currentAnimation", animation);
-            animation.start();
-        }
-    }
-
-    private void setFrame(ImageView imageView, String imagePath, int columns, int rows, int totalFrames, int frameWidth, int frameHeight, float fps, int frame) {
-        Animation animation = new Animation(imageView, new Image(imagePath), columns, rows, totalFrames, frameWidth, frameHeight, fps);
-        animation.setFrame(frame);
-    }
-
 
     private void jumpPlayer() {
         if (onGround) {
@@ -347,18 +323,18 @@ public class MainApp {
             for (Node platform : mapGenerator.getPlatforms()) {
                 if (player.getHitBox().getBoundsInParent().intersects(platform.getBoundsInParent())) {
                     if (movingDown) {
-                        if (player.getHitBox().getTranslateY() + 40 == platform.getTranslateY()) {
+                        if (player.getHitBox().getTranslateY() + player.getHitBox().getHeight() == platform.getTranslateY()) {
                             player.getHitBox().setTranslateY(player.getHitBox().getTranslateY() - 1);
-                            player.getImage().setTranslateY(player.getImage().getTranslateY() - 1);
+                            player.getImage().setTranslateY(player.getHitBox().getTranslateY() - player.getImage().getFitHeight() + player.getHitBox().getHeight());
                             playerVelocity = new Point2D(playerVelocity.getX(), 0);
                             canJump = true;
                             onGround = true;
                             return;
                         }
                     } else {
-                        if (player.getHitBox().getTranslateY() == platform.getTranslateY() + 60) {
+                        if (player.getHitBox().getTranslateY() == platform.getTranslateY() + platform.getBoundsInParent().getHeight()) {
                             player.getHitBox().setTranslateY(player.getHitBox().getTranslateY() + 1);
-                            player.getImage().setTranslateY(player.getImage().getTranslateY() + 1);
+                            player.getImage().setTranslateY(player.getHitBox().getTranslateY() - player.getImage().getFitHeight() + player.getHitBox().getHeight());
                             playerVelocity = new Point2D(playerVelocity.getX(), 0);
                             return;
                         }
@@ -366,7 +342,7 @@ public class MainApp {
                 }
             }
             player.getHitBox().setTranslateY(player.getHitBox().getTranslateY() + (movingDown ? 1 : -1));
-            player.getImage().setTranslateY(player.getImage().getTranslateY() + (movingDown ? 1 : -1));
+            player.getImage().setTranslateY(player.getHitBox().getTranslateY() - player.getImage().getFitHeight() + player.getHitBox().getHeight());
         }
 
         if (!movingDown && !onGround) {
