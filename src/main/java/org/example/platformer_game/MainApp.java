@@ -1,5 +1,6 @@
 package org.example.platformer_game;
 
+import SQL.InsertScore;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -18,8 +19,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+
 
 public class MainApp {
     @FXML
@@ -66,6 +69,10 @@ public class MainApp {
 
     private boolean exdialogbool = false;
     private Scene scene;
+
+    public boolean isLevel1 = false;
+    public boolean isLevel2 = false;
+    public boolean isLevel3 = false;
 
     public MainApp() {
     }
@@ -257,7 +264,7 @@ public class MainApp {
                 running = false;
             }else{
                 counter++;
-                System.out.println("ctr " + counter);
+                System.out.println("Counter Check: " + counter);
             }
         }
 
@@ -349,6 +356,7 @@ public class MainApp {
 
     @FXML
     private void levelOne(ActionEvent actionEvent) throws IOException {
+        isLevel1 = true;
         levelOneInitContent();
 
         scene = ((Node) actionEvent.getSource()).getScene();
@@ -367,6 +375,7 @@ public class MainApp {
 
     @FXML
     private void levelTwo(ActionEvent actionEvent) throws IOException {
+        isLevel2 = true;
         levelTwoInitContent();
 
         scene = ((Node) actionEvent.getSource()).getScene();
@@ -385,6 +394,7 @@ public class MainApp {
 
     @FXML
     private void levelThree(ActionEvent actionEvent) throws IOException {
+        isLevel3 = true;
         levelThreeInitContent();
 
         scene = ((Node) actionEvent.getSource()).getScene();
@@ -431,19 +441,41 @@ public class MainApp {
                     update();
                 }
                 if(counter == 10){
-                    System.out.println("done");
+                    System.out.println("done\n");
                     running = false;
+
+                    // inserting to tblscore
+                    InsertScore ins;
+                    if(isLevel1){
+                        ins = new InsertScore(GameController.loggedUserId, score, 1);
+                        ins.insertScore();
+                    }else if(isLevel2){
+                        ins = new InsertScore(GameController.loggedUserId, score, 2);
+                        ins.insertScore();
+                    }else if(isLevel3){
+                        ins = new InsertScore(GameController.loggedUserId, score, 3);
+                        ins.insertScore();
+                    }
+
                     exdialog.open();
+                    score = 0;
+                    hintPoints = 0;
+                    isLevel1 = false;
+                    isLevel2 = false;
+                    isLevel3 = false;
 
                     exdialog.setOnCloseRequest(event -> {
                         System.out.println("Closed");
                     });
                     counter=0;
                     exdialog.btnmenu.setOnAction(event -> {
+                        gameRoot.getChildren().removeAll();    // pero di mawala ang picture sa player :(
                         Stage stage1 = (Stage) scene.getWindow();
                         stage1.close();
                         Scene scene = ((Node) event.getSource()).getScene();
-                        exdialog.close();
+                        Stage stage2 = (Stage) scene.getWindow();
+                        stage2.close();
+                        //exdialog.close();         // I changed it to stage 2
 
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("level-ui.fxml"));
                         Parent root = null;
@@ -458,6 +490,7 @@ public class MainApp {
                         Stage stage = new Stage();
                         stage.setScene(newScene);
                         stage.show();
+                        running = true;
 
                     });
 

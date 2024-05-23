@@ -28,6 +28,8 @@ public class GameController {
     @FXML
     private TextField tfPassword;
     int LogedUser = -1;
+    public static int loggedUserId;
+
 
     @FXML
     protected void OnRegister(ActionEvent event) {
@@ -83,6 +85,8 @@ public class GameController {
     protected void onLogIn(ActionEvent event) {
         String username = tfUsername.getText();
         String password = tfPassword.getText();
+        loggedUserId = getLogUserId(username);
+        System.out.println("LOGGED USER ID " + loggedUserId);
 
         try (Connection c = MySqlConnection.getConnection();
              PreparedStatement statement = c.prepareStatement(
@@ -122,4 +126,29 @@ public class GameController {
             e.printStackTrace();
         }
     }
+
+    public static int getLogUserId(String username){
+        int id = 0;
+        String query = "SELECT id FROM tblusers WHERE username = ?";
+        try (Connection c = MySqlConnection.getConnection();
+             PreparedStatement preparedStatement = c.prepareStatement(query)) {
+
+            preparedStatement.setString(1, username);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    id = resultSet.getInt("id");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return id;
+    }
+
 }
