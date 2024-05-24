@@ -80,6 +80,8 @@ public class MainApp {
     public boolean isLevel2 = false;
     public boolean isLevel3 = false;
 
+    private boolean facingLeft = false;
+
     //Music
     private Sounds sounds = new Sounds();
 
@@ -219,33 +221,48 @@ public class MainApp {
 
     /* Another desperate attempt to implement the animation */
     // The attempt works holy jesus
+
     private void update() {
 
         if (!isPressed(KeyCode.W) && !isPressed(KeyCode.A) && !isPressed(KeyCode.D) && onGround) {
-            player.animateIdle();
+            if(facingLeft) {
+                player.animateIdleR();
+            } else {
+                player.animateIdle();
+            }
         }
+//        } else if (!isPressed(KeyCode.W) && !isPressed(KeyCode.A) && !isPressed(KeyCode.D) && onGround && facingLeft) {
+//            player.animateIdleR();
+//        }
 
         if (isPressed(KeyCode.W) && player.getHitBox().getTranslateY() >= 5 && onGround) {
             jumpPlayer();
             playSE(0);
         } else if (!onGround && playerVelocity.getY() > 0) {
-            player.animateFall();
+            if(facingLeft) {
+                player.animateFallR();
+            } else {
+                player.animateFall();
+            }
         }
 
         if(!onGround) {
-            player.animateJump();
+            if(facingLeft) {
+                player.animateJumpR();
+            } else {
+                player.animateJump();
+            }
         }
 
-        // TODO find another implementation for reverse moving
         if (isPressed(KeyCode.A) && player.getHitBox().getTranslateX() >= 5) {
-            player.animateRun();
-            player.getImage().setScaleX(-1);
+            player.animateRunR();
+            facingLeft = true;
             movePlayerX(-5);
         }
 
         if (isPressed(KeyCode.D) && player.getHitBox().getTranslateX() + 40 <= levelWidth - 5) {
             player.animateRun();
-            player.getImage().setScaleX(1);
+            facingLeft = false;
             movePlayerX(5);
         }
 
@@ -393,12 +410,12 @@ public class MainApp {
         Login.close();
 
         Stage stage = (Stage) lvlOneButton.getScene().getWindow();
+        stage.setResizable(false);
         scene = new Scene(appRoot);
         scene.setOnKeyPressed(event -> keys.put(event.getCode(),true));
         scene.setOnKeyReleased(event -> keys.put(event.getCode(),false));
         stage.setScene(scene);
         stage.show();
-        stage.setResizable(false);
         Platform.runLater(this::runGameLoop);
     }
 
@@ -413,12 +430,12 @@ public class MainApp {
         Login.close();
 
         Stage stage = (Stage) lvlTwoButton.getScene().getWindow();
+        stage.setResizable(false);
         scene = new Scene(appRoot);
         scene.setOnKeyPressed(event -> keys.put(event.getCode(),true));
         scene.setOnKeyReleased(event -> keys.put(event.getCode(),false));
         stage.setScene(scene);
         stage.show();
-        stage.setResizable(false);
         Platform.runLater(this::runGameLoop);
     }
 
@@ -433,20 +450,22 @@ public class MainApp {
         Login.close();
 
         Stage stage = (Stage) lvlThreeButton.getScene().getWindow();
+        stage.setResizable(false);
         scene = new Scene(appRoot);
         scene.setOnKeyPressed(event -> keys.put(event.getCode(),true));
         scene.setOnKeyReleased(event -> keys.put(event.getCode(),false));
         stage.setScene(scene);
         stage.show();
-        stage.setResizable(false);
         Platform.runLater(this::runGameLoop);
     }
+
+    // TODO Attempt to fix the wide screen bug
 
     @FXML
     private void GameSystem(ActionEvent actionEvent) throws IOException {
         Scene scene = ((Node) actionEvent.getSource()).getScene();
-        Stage Login = (Stage) scene.getWindow();
-        Login.close();
+        Stage Level = (Stage) scene.getWindow();
+        Level.close();
 
         FXMLLoader fxmlLoader = new FXMLLoader(GameSystem.class.getResource("login.fxml"));
         Parent root = fxmlLoader.load();
@@ -472,6 +491,7 @@ public class MainApp {
                     update();
                 }
                 if(counter == 10){
+                    stopMusic();
                     System.out.println("done\n");
                     running = false;
 
@@ -500,7 +520,6 @@ public class MainApp {
                     });
                     counter=0;
                     exdialog.btnmenu.setOnAction(event -> {
-                        stopMusic();
                         gameRoot.getChildren().removeAll();    // pero di mawala ang picture sa player :(
                         Stage stage1 = (Stage) scene.getWindow();
                         stage1.close();

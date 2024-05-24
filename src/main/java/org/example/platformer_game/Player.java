@@ -14,9 +14,13 @@ public class Player {
     private int x, y, h, w;
 
     private Image[] runImages;
+    private Image[] RrunImages;
     private Image[] idleImages;
+    private Image[] RidleImages;
     private Image[] jumpImages;
+    private Image[] RjumpImages;
     private Image[] fallImages;
+    private Image[] RfallImages;
     private int currentFrame = 0;
 
     private long lastFrameTime = 0;
@@ -32,6 +36,15 @@ public class Player {
     }
 
     public Player(int x, int y, int w, int h) {
+        RrunImages = new Image[] {
+                new Image("run1r.png"),
+                new Image("run2r.png"),
+                new Image("run3r.png"),
+                new Image("run4r.png"),
+                new Image("run5r.png"),
+                new Image("run6r.png")
+        };
+
         runImages = new Image[]{
                 new Image("run1.png"),
                 new Image("run2.png"),
@@ -48,12 +61,27 @@ public class Player {
                 new Image("idle4.png")
         };
 
+        RidleImages = new Image[]{
+                new Image("idle1r.png"),
+                new Image("idle2r.png"),
+                new Image("idle3r.png"),
+                new Image("idle4r.png")
+        };
+
         jumpImages = new Image[]{
                 new Image("jump2.png")
         };
 
+        RjumpImages = new Image[]{
+                new Image("jump2r.png")
+        };
+
         fallImages = new Image[]{
                 new Image("fall2.png")
+        };
+
+        RfallImages = new Image[]{
+                new Image("fall2r.png")
         };
 
         imageView = new ImageView("Punk.png");
@@ -85,6 +113,34 @@ public class Player {
             return true;
         }
         return false;
+    }
+
+    public void animateRunR() {
+        if (shouldUpdateFrame()) {
+            currentFrame = (currentFrame + 1) % RrunImages.length;
+            imageView.setImage(RrunImages[currentFrame]);
+        }
+    }
+
+    public void animateIdleR() {
+        if (shouldUpdateFrame()) {
+            currentFrame = (currentFrame + 1) % RidleImages.length;
+            imageView.setImage(RidleImages[currentFrame]);
+        }
+    }
+
+    public void animateJumpR() {
+        if (shouldUpdateFrame()) {
+            currentFrame = (currentFrame + 1) % RjumpImages.length;
+            imageView.setImage(RjumpImages[currentFrame]);
+        }
+    }
+
+    public void animateFallR() {
+        if (shouldUpdateFrame()) {
+            currentFrame = (currentFrame + 1) % RfallImages.length;
+            imageView.setImage(RfallImages[currentFrame]);
+        }
     }
 
     public void animateRun() {
