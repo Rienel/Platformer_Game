@@ -123,7 +123,6 @@ public class MainApp {
                 gameRoot.setLayoutX(-(offset - 640));
             }
         });
-        playMusic(3);
 
         appRoot.getChildren().addAll(mapGenerator.lvl1setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
     }
@@ -162,8 +161,6 @@ public class MainApp {
             }
         });
 
-        playMusic(4);
-
         appRoot.getChildren().addAll(mapGenerator.lvl2setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
     }
 
@@ -200,8 +197,6 @@ public class MainApp {
                 gameRoot.setLayoutX(-(offset - 640));
             }
         });
-
-        playMusic(5);
 
         appRoot.getChildren().addAll(mapGenerator.lvl3setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
     }
@@ -290,11 +285,13 @@ public class MainApp {
 
         if(dialog.isCorrect()){
             if(counter == 10){
+                playMusic(1);
                 System.out.println("Done");
                 exdialog.open();
                 running = false;
             }else{
                 counter++;
+                playSE(2);
                 System.out.println("Counter Check: " + counter);
             }
         }
@@ -387,6 +384,7 @@ public class MainApp {
 
     @FXML
     private void levelOne(ActionEvent actionEvent) throws IOException {
+        playMusic(3);
         isLevel1 = true;
         levelOneInitContent();
 
@@ -406,6 +404,7 @@ public class MainApp {
 
     @FXML
     private void levelTwo(ActionEvent actionEvent) throws IOException {
+        playMusic(4);
         isLevel2 = true;
         levelTwoInitContent();
 
@@ -425,6 +424,7 @@ public class MainApp {
 
     @FXML
     private void levelThree(ActionEvent actionEvent) throws IOException {
+        playMusic(5);
         isLevel3 = true;
         levelThreeInitContent();
 
@@ -500,6 +500,7 @@ public class MainApp {
                     });
                     counter=0;
                     exdialog.btnmenu.setOnAction(event -> {
+                        stopMusic();
                         gameRoot.getChildren().removeAll();    // pero di mawala ang picture sa player :(
                         Stage stage1 = (Stage) scene.getWindow();
                         stage1.close();
