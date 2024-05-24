@@ -14,14 +14,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import java.io.File;
 
+import javax.print.attribute.standard.Media;
+import javax.sound.sampled.*;
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Objects;
 
 
 public class MainApp {
@@ -74,6 +80,9 @@ public class MainApp {
     public boolean isLevel2 = false;
     public boolean isLevel3 = false;
 
+    //Music
+    private Sounds sounds = new Sounds();
+
     public MainApp() {
     }
 
@@ -114,6 +123,7 @@ public class MainApp {
                 gameRoot.setLayoutX(-(offset - 640));
             }
         });
+        playMusic(3);
 
         appRoot.getChildren().addAll(mapGenerator.lvl1setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
     }
@@ -152,6 +162,8 @@ public class MainApp {
             }
         });
 
+        playMusic(4);
+
         appRoot.getChildren().addAll(mapGenerator.lvl2setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
     }
 
@@ -189,7 +201,25 @@ public class MainApp {
             }
         });
 
+        playMusic(5);
+
         appRoot.getChildren().addAll(mapGenerator.lvl3setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+    }
+
+    //Music
+    public void playMusic(int i) {
+        sounds.setFile(i);
+        sounds.play();
+        sounds.loop();
+    }
+
+    public void stopMusic() {
+        sounds.stop();
+    }
+
+    public void playSE(int i) {
+        sounds.setFile(i);
+        sounds.play();
     }
 
     /* Another desperate attempt to implement the animation */
@@ -202,6 +232,7 @@ public class MainApp {
 
         if (isPressed(KeyCode.W) && player.getHitBox().getTranslateY() >= 5 && onGround) {
             jumpPlayer();
+            playSE(0);
         } else if (!onGround && playerVelocity.getY() > 0) {
             player.animateFall();
         }

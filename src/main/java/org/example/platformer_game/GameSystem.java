@@ -20,7 +20,8 @@ public class GameSystem extends Application {
         //para di mu resize ang window
         stage.setResizable(false);
         stage.show();
-    } 
+
+    }
 
     public static void main(String[] args) {
         launch();
