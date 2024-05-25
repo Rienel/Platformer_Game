@@ -187,7 +187,7 @@ public class MainApp {
         scoreTxt.setLayoutY(60);
 
         levelWidth = LevelData.LEVEL_TWO[0].length() * 60;
-        mapGenerator.setLevel(2);
+        mapGenerator.setLevel(3);
         mapGenerator.run();
 
         gameRoot.getChildren().addAll(player.getHitBox(), player.getImage());
