@@ -13,7 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -77,6 +77,12 @@ public class MainApp {
 
     //Music
     private Sounds sounds = new Sounds();
+
+    //Camera
+    private double cameraX = 0;
+    private double cameraY = 0;
+    private final double smoothing = 0.1;
+
 
     public MainApp() {
     }
@@ -180,8 +186,8 @@ public class MainApp {
         scoreTxt.setLayoutX(30);
         scoreTxt.setLayoutY(60);
 
-        levelWidth = LevelData.LEVEL_THREE[0].length() * 60;
-        mapGenerator.setLevel(3);
+        levelWidth = LevelData.LEVEL_TWO[0].length() * 60;
+        mapGenerator.setLevel(2);
         mapGenerator.run();
 
         gameRoot.getChildren().addAll(player.getHitBox(), player.getImage());
@@ -252,7 +258,7 @@ public class MainApp {
         if (isPressed(KeyCode.D) && player.getHitBox().getTranslateX() + 40 <= levelWidth - 5) {
             player.animateRun();
             facingLeft = false;
-            movePlayerX(15);
+            movePlayerX(5);
         }
 
         if (playerVelocity.getY() < 10) {
@@ -262,6 +268,20 @@ public class MainApp {
         movePlayerY((int) playerVelocity.getY());
         handleInteractions();
         dialog.setCorrect(false);
+
+        centerCameraOnPlayer();
+    }
+
+    //Camera
+    private void centerCameraOnPlayer() {
+        double targetX = player.getHitBox().getTranslateX() - 640;
+        double targetY = player.getHitBox().getTranslateY() - 360;
+
+        cameraX += (targetX - cameraX) * smoothing;
+        cameraY += (targetY - cameraY) * smoothing;
+
+        gameRoot.setLayoutX(-cameraX);
+        gameRoot.setLayoutY(-cameraY);
     }
 
     private void jumpPlayer() {
