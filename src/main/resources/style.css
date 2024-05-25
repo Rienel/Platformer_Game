@@ -1,29 +1,11 @@
-/*@font-face {
-    font-family: "Retro Gaming";
-    src: url('@../../../Retro-Gaming.ttf');
-}*/
-
-.label {
-    -fx-font-family: "Retro Gaming";
-    -fx-font-size: 15px;
-}
-
-
 .custom-button {
     -fx-background-size: cover;
     -fx-background-repeat: no-repeat;
     -fx-background-color: transparent;
+    -fx-border-color: transparent;
 }
-
 
 #lvlbg{
     -fx-background-image: url("level-ui-background.png");
     -fx-background-size: cover;
-}
-
-.level-button {
-    -fx-background-color: #720000; /* Button color */
-    -fx-text-fill: #FFFFFF; /* Text color */
-    -fx-font-size: 20px; /* Font size */
-    -fx-padding: 10px; /* Padding around text */
 }

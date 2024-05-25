@@ -14,20 +14,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import java.io.File;
 
-import javax.print.attribute.standard.Media;
-import javax.sound.sampled.*;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Objects;
 
 
 public class MainApp {
@@ -219,11 +212,7 @@ public class MainApp {
         sounds.play();
     }
 
-    /* Another desperate attempt to implement the animation */
-    // The attempt works holy jesus
-
     private void update() {
-
         if (!isPressed(KeyCode.W) && !isPressed(KeyCode.A) && !isPressed(KeyCode.D) && onGround) {
             if(facingLeft) {
                 player.animateIdleR();
@@ -520,11 +509,14 @@ public class MainApp {
                     });
                     counter=0;
                     exdialog.btnmenu.setOnAction(event -> {
-                        gameRoot.getChildren().removeAll();    // pero di mawala ang picture sa player :(
-                        Stage stage1 = (Stage) scene.getWindow();
+                        stopMusic();
+//                        gameRoot.getChildren().removeAll();    // pero di mawala ang picture sa player :(   //i think bcuz removeAll and dili clear.
+                        gameRoot.getChildren().clear();
+                        Scene scene1 = ((Node) event.getSource()).getScene();
+                        Stage stage1 = (Stage) scene1.getWindow();
                         stage1.close();
-                        Scene scene = ((Node) event.getSource()).getScene();
-                        Stage stage2 = (Stage) scene.getWindow();
+                        Scene scene2 = ((Node) event.getSource()).getScene();
+                        Stage stage2 = (Stage) scene2.getWindow();
                         stage2.close();
                         //exdialog.close();         // I changed it to stage 2
 
@@ -544,7 +536,6 @@ public class MainApp {
                         running = true;
 
                     });
-
                 }
 
                 if (dialogEvent) {

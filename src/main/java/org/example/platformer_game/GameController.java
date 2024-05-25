@@ -27,14 +27,18 @@ public class GameController {
     private TextField tfUsername;
     @FXML
     private TextField tfPassword;
+    @FXML
+    private TextField rtfUsername;
+    @FXML
+    private TextField rtfPassword;
     int LogedUser = -1;
     public static int loggedUserId;
 
 
     @FXML
     protected void OnRegister(ActionEvent event) {
-        String username = tfUsername.getText();
-        String password = tfPassword.getText();
+        String username = rtfUsername.getText();
+        String password = rtfPassword.getText();
 
         try (Connection c = MySqlConnection.getConnection();
              PreparedStatement statement = c.prepareStatement(
@@ -61,24 +65,6 @@ public class GameController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @FXML
-    protected void onRegisterAcc(ActionEvent event) throws IOException {
-        // E close ang login after pressing the register
-        Scene scene = ((Node) event.getSource()).getScene();
-        Stage Login = (Stage) scene.getWindow();
-        Login.close();
-
-        // Opens login fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("register.fxml"));
-        Parent root = loader.load();
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root, 1280, 720));
-//        stage.setFullScreen(true);
-//        stage.setFullScreenExitHint("");
-        stage.setResizable(false);
-        stage.show();
     }
 
     @FXML
