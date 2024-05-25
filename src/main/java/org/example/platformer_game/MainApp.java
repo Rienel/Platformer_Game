@@ -252,7 +252,7 @@ public class MainApp {
         if (isPressed(KeyCode.D) && player.getHitBox().getTranslateX() + 40 <= levelWidth - 5) {
             player.animateRun();
             facingLeft = false;
-            movePlayerX(5);
+            movePlayerX(15);
         }
 
         if (playerVelocity.getY() < 10) {
