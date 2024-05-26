@@ -33,10 +33,10 @@ public class Tiles {
                 image = new Image("inside1.png");
                 break;
             case 2, 18, 34:
-                image = new Image("mysteryQ.png");
+                image = new Image("chest.png");
                 break;
             case 3, 19, 35:
-                image = new Image("hint.png");
+                image = new Image("hints.png");
                 break;
             case 4:
                 image = new Image("top-left1.png");

@@ -5,8 +5,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import java.awt.*;
-
 public class Player {
 
     private ImageView imageView;
@@ -95,8 +93,6 @@ public class Player {
 
         hitBox = new Rectangle(w, h);
         hitBox.setFill(Color.TRANSPARENT);
-        hitBox.setStrokeWidth(1);
-        hitBox.setStroke(Color.RED);
 
         hitBox.setTranslateX(x);
         hitBox.setTranslateY(y);

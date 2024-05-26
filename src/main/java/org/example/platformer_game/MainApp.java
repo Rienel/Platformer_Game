@@ -52,10 +52,6 @@ public class MainApp {
     public static Label hintPointsTxt = new Label();
     public static Label scoreTxt = new Label();
 
-    private final Player player = new Player(70, 430, 40, 40);
-    private Point2D playerVelocity = new Point2D(0, 0);
-    private boolean onGround = true;
-
     private MapGenerator mapGenerator = new MapGenerator();
 
     private int levelWidth;
@@ -73,7 +69,11 @@ public class MainApp {
     public boolean isLevel2 = false;
     public boolean isLevel3 = false;
 
+    //isBooleans
     private boolean facingLeft = false;
+    private boolean enemyFacingLeft = false;
+    private boolean onGround = true;
+    private boolean enemyOnGround = true;
 
     //Music
     private Sounds sounds = new Sounds();
@@ -83,6 +83,13 @@ public class MainApp {
     private double cameraY = 0;
     private final double smoothing = 0.1;
 
+    //Player
+    private final Player player = new Player(70, 430, 40, 40);
+    private Point2D playerVelocity = new Point2D(0, 0);
+
+    //Enemy
+    private final Enemy enemy = new Enemy(70, 430, 40, 40);
+    private Point2D enemyVelocity = new Point2D(0, 0);
 
     public MainApp() {
     }
@@ -91,14 +98,12 @@ public class MainApp {
         return scene;
     }
 
-    private void levelOneInitContent() {
-
-        Rectangle board = new Rectangle(200,100,Color.WHITESMOKE);
+    private void initLevelContent(int level) {
+        Rectangle board = new Rectangle(200, 100, Color.WHITESMOKE);
         board.setLayoutY(25);
         board.setLayoutX(25);
 
         hintPointsTxt.setText(String.valueOf(hintPoints));
-
         hintPointsTxt.setPrefHeight(hintPointsTxt.getFont().getSize());
         hintPointsTxt.setPrefWidth(hintPointsTxt.getFont().getSize());
         hintPointsTxt.setTextFill(Color.BLACK);
@@ -112,11 +117,28 @@ public class MainApp {
         scoreTxt.setLayoutX(30);
         scoreTxt.setLayoutY(60);
 
-        levelWidth = LevelData.LEVEL_ONE[0].length() * 60;
-        mapGenerator.setLevel(1);
+        String[] levelData;
+        switch (level) {
+            case 1:
+                levelData = LevelData.LEVEL_ONE;
+                mapGenerator.setLevel(1);
+                break;
+            case 2:
+                levelData = LevelData.LEVEL_TWO;
+                mapGenerator.setLevel(2);
+                break;
+            case 3:
+                levelData = LevelData.LEVEL_THREE;
+                mapGenerator.setLevel(3);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid level: " + level);
+        }
+
+        levelWidth = levelData[0].length() * 60;
         mapGenerator.run();
 
-        gameRoot.getChildren().addAll(player.getHitBox(), player.getImage());
+        gameRoot.getChildren().addAll(player.getHitBox(), player.getImage(), enemy.getHitBox(), enemy.getImage());
 
         player.getHitBox().translateXProperty().addListener((obs, old, newValue) -> {
             int offset = newValue.intValue();
@@ -125,82 +147,31 @@ public class MainApp {
             }
         });
 
-        appRoot.getChildren().addAll(mapGenerator.lvl1setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+        switch (level) {
+            case 1:
+                appRoot.getChildren().addAll(mapGenerator.lvl1setBg(), board, gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+                break;
+            case 2:
+                appRoot.getChildren().addAll(mapGenerator.lvl2setBg(), board, gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+                break;
+            case 3:
+                appRoot.getChildren().addAll(mapGenerator.lvl3setBg(), board, gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+                break;
+        }
+    }
+
+    private void levelOneInitContent() {
+        initLevelContent(1);
     }
 
     private void levelTwoInitContent() {
-
-        Rectangle board = new Rectangle(200,100,Color.WHITESMOKE);
-        board.setLayoutY(25);
-        board.setLayoutX(25);
-
-        hintPointsTxt.setText(String.valueOf(hintPoints));
-
-        hintPointsTxt.setPrefHeight(hintPointsTxt.getFont().getSize());
-        hintPointsTxt.setPrefWidth(hintPointsTxt.getFont().getSize());
-        hintPointsTxt.setTextFill(Color.BLACK);
-        hintPointsTxt.setLayoutX(30);
-        hintPointsTxt.setLayoutY(30);
-
-        scoreTxt.setText(String.valueOf(score));
-        scoreTxt.setPrefHeight(scoreTxt.getFont().getSize());
-        scoreTxt.setPrefWidth(scoreTxt.getFont().getSize());
-        scoreTxt.setTextFill(Color.BLACK);
-        scoreTxt.setLayoutX(30);
-        scoreTxt.setLayoutY(60);
-
-        levelWidth = LevelData.LEVEL_TWO[0].length() * 60;
-        mapGenerator.setLevel(2);
-        mapGenerator.run();
-
-        gameRoot.getChildren().addAll(player.getHitBox(), player.getImage());
-
-        player.getHitBox().translateXProperty().addListener((obs, old, newValue) -> {
-            int offset = newValue.intValue();
-            if (offset > 640 && offset < levelWidth - 640) {
-                gameRoot.setLayoutX(-(offset - 640));
-            }
-        });
-
-        appRoot.getChildren().addAll(mapGenerator.lvl2setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+        initLevelContent(2);
     }
 
     private void levelThreeInitContent() {
-
-        Rectangle board = new Rectangle(200,100,Color.WHITESMOKE);
-        board.setLayoutY(25);
-        board.setLayoutX(25);
-
-        hintPointsTxt.setText(String.valueOf(hintPoints));
-
-        hintPointsTxt.setPrefHeight(hintPointsTxt.getFont().getSize());
-        hintPointsTxt.setPrefWidth(hintPointsTxt.getFont().getSize());
-        hintPointsTxt.setTextFill(Color.BLACK);
-        hintPointsTxt.setLayoutX(30);
-        hintPointsTxt.setLayoutY(30);
-
-        scoreTxt.setText(String.valueOf(score));
-        scoreTxt.setPrefHeight(scoreTxt.getFont().getSize());
-        scoreTxt.setPrefWidth(scoreTxt.getFont().getSize());
-        scoreTxt.setTextFill(Color.BLACK);
-        scoreTxt.setLayoutX(30);
-        scoreTxt.setLayoutY(60);
-
-        levelWidth = LevelData.LEVEL_TWO[0].length() * 60;
-        mapGenerator.setLevel(3);
-        mapGenerator.run();
-
-        gameRoot.getChildren().addAll(player.getHitBox(), player.getImage());
-
-        player.getHitBox().translateXProperty().addListener((obs, old, newValue) -> {
-            int offset = newValue.intValue();
-            if (offset > 640 && offset < levelWidth - 640) {
-                gameRoot.setLayoutX(-(offset - 640));
-            }
-        });
-
-        appRoot.getChildren().addAll(mapGenerator.lvl3setBg(),board,gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+        initLevelContent(3);
     }
+
 
     //Music
     public void playMusic(int i) {
@@ -226,9 +197,6 @@ public class MainApp {
                 player.animateIdle();
             }
         }
-//        } else if (!isPressed(KeyCode.W) && !isPressed(KeyCode.A) && !isPressed(KeyCode.D) && onGround && facingLeft) {
-//            player.animateIdleR();
-//        }
 
         if (isPressed(KeyCode.W) && player.getHitBox().getTranslateY() >= 5 && onGround) {
             jumpPlayer();
@@ -270,6 +238,35 @@ public class MainApp {
         dialog.setCorrect(false);
 
         centerCameraOnPlayer();
+    }
+
+    private void updateEnemy() {
+        if (enemy.isCollidingWithSomething()) {
+            enemyFacingLeft = !enemyFacingLeft;
+        }
+
+        if (enemyFacingLeft) {
+            enemy.RwalkImages();
+            moveEnemyX(-2);
+        } else {
+            enemy.walkImages();
+            moveEnemyX(2);
+        }
+
+        if (enemyVelocity.getY() < 10) {
+            enemyVelocity = enemyVelocity.add(0, 1);
+        }
+
+        moveEnemyY((int) enemyVelocity.getY());
+
+        // If the enemy is close to the player, initiate attack animations
+        if (enemy.isInRangeOfPlayer(player)) {
+            if (enemyFacingLeft) {
+                enemy.RattackImages();
+            } else {
+                enemy.attackImages();
+            }
+        }
     }
 
     //Camera
@@ -346,6 +343,61 @@ public class MainApp {
                 it.remove();
                 gameRoot.getChildren().remove(hintBox);
             }
+        }
+    }
+
+    //ENEMY
+    private void moveEnemyX(int value) {
+        boolean movingRight = value > 0;
+
+        for (int i = 0; i < Math.abs(value); i++) {
+            for (Node platform : mapGenerator.getPlatforms()) {
+                if (enemy.getHitBox().getBoundsInParent().intersects(platform.getBoundsInParent())) {
+                    if (movingRight) {
+                        if (enemy.getHitBox().getTranslateX() + enemy.getHitBox().getWidth() == platform.getTranslateX()) {
+                            enemyFacingLeft = true;
+                            return;
+                        }
+                    } else {
+                        if (enemy.getHitBox().getTranslateX() == platform.getTranslateX() + platform.getBoundsInParent().getWidth()) {
+                            enemyFacingLeft = false;
+                            return;
+                        }
+                    }
+                }
+            }
+            enemy.getHitBox().setTranslateX(enemy.getHitBox().getTranslateX() + (movingRight ? 1 : -1));
+            enemy.getImage().setTranslateX(enemy.getImage().getTranslateX() + (movingRight ? 1 : -1));
+        }
+    }
+
+
+    private void moveEnemyY(int value) {
+        boolean movingDown = value > 0;
+
+        for (int i = 0; i < Math.abs(value); i++) {
+            for (Node platform : mapGenerator.getPlatforms()) {
+                if (enemy.getHitBox().getBoundsInParent().intersects(platform.getBoundsInParent())) {
+                    if (movingDown) {
+                        if (enemy.getHitBox().getTranslateY() + enemy.getHitBox().getHeight() == platform.getTranslateY()) {
+                            enemy.getHitBox().setTranslateY(enemy.getHitBox().getTranslateY() - 1);
+                            enemy.getImage().setTranslateY(enemy.getHitBox().getTranslateY() - enemy.getImage().getFitHeight() + enemy.getHitBox().getHeight());
+                            enemyVelocity = new Point2D(enemyVelocity.getX(), 0);
+                            enemyOnGround = true;
+                            return;
+                        }
+                    } else {
+                        if (enemy.getHitBox().getTranslateY() == platform.getTranslateY() + platform.getBoundsInParent().getHeight()) {
+                            enemy.getHitBox().setTranslateY(enemy.getHitBox().getTranslateY() + 1);
+                            enemy.getImage().setTranslateY(enemy.getHitBox().getTranslateY() - enemy.getImage().getFitHeight() + enemy.getHitBox().getHeight());
+                            enemyVelocity = new Point2D(enemyVelocity.getX(), 0);
+                            return;
+                        }
+                    }
+                }
+            }
+            enemy.getHitBox().setTranslateY(enemy.getHitBox().getTranslateY() + (movingDown ? 1 : -1));
+            enemy.getImage().setTranslateY(enemy.getHitBox().getTranslateY() - enemy.getImage().getFitHeight() + player.getHitBox().getHeight());
         }
     }
 
@@ -468,7 +520,7 @@ public class MainApp {
         Platform.runLater(this::runGameLoop);
     }
 
-    // TODO Attempt to fix the wide screen bug
+    // TODO fix the wide screen bug
 
     @FXML
     private void GameSystem(ActionEvent actionEvent) throws IOException {
@@ -498,6 +550,7 @@ public class MainApp {
             public void handle(long l) {
                 if (running) {
                     update();
+                    updateEnemy();
                 }
                 if(counter == 10){
                     stopMusic();
@@ -530,7 +583,6 @@ public class MainApp {
                     counter=0;
                     exdialog.btnmenu.setOnAction(event -> {
                         stopMusic();
-//                        gameRoot.getChildren().removeAll();    // pero di mawala ang picture sa player :(   //i think bcuz removeAll and dili clear.
                         gameRoot.getChildren().clear();
                         Scene scene1 = ((Node) event.getSource()).getScene();
                         Stage stage1 = (Stage) scene1.getWindow();
