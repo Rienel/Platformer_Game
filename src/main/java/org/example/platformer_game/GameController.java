@@ -8,11 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -31,9 +27,11 @@ public class GameController {
     private TextField rtfUsername;
     @FXML
     private TextField rtfPassword;
+    @FXML
+    private Button levelUIButton;
+
     int LogedUser = -1;
     public static int loggedUserId;
-
 
     @FXML
     protected void OnRegister(ActionEvent event) {
@@ -55,8 +53,6 @@ public class GameController {
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root, 1280, 720));
-//            stage.setFullScreen(true);
-//            stage.setFullScreenExitHint("");
             stage.setResizable(false);
             stage.show();
 
@@ -91,24 +87,29 @@ public class GameController {
                 Stage Login = (Stage) scene.getWindow();
                 Login.close();
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("level-ui.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPage.fxml"));
                 Parent root = loader.load();
                 Scene newScene = new Scene(root, 1280, 720);
-
-                // Add the stylesheet to the Scene
-                newScene.getStylesheets().addAll(getClass().getClassLoader().getResource("style.css").toExternalForm());
-
-                // Create the Stage
                 Stage stage = new Stage();
-
-                // Set the Scene on the Stage
                 stage.setScene(newScene);
-
-                // Show the Stage
                 stage.setResizable(false);
                 stage.show();
             }
         } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToLevelUI(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("level-ui.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 1280, 720);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -128,11 +129,9 @@ public class GameController {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
         }catch (SQLException e) {
             e.printStackTrace();
         }
-
 
         return id;
     }

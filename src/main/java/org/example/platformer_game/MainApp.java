@@ -55,6 +55,7 @@ public class MainApp {
     private MapGenerator mapGenerator = new MapGenerator();
 
     private int levelWidth;
+    private Stage gameStage;
 
     private boolean dialogEvent = false;
     private static boolean running = true;
@@ -190,6 +191,15 @@ public class MainApp {
     }
 
     private void update() {
+
+        if(isPressed(KeyCode.A) && isPressed(KeyCode.D) && onGround) {
+            if(facingLeft) {
+                player.animateIdleR();
+            } else {
+                player.animateIdle();
+            }
+        }
+
         if (!isPressed(KeyCode.W) && !isPressed(KeyCode.A) && !isPressed(KeyCode.D) && onGround) {
             if(facingLeft) {
                 player.animateIdleR();
@@ -371,7 +381,6 @@ public class MainApp {
         }
     }
 
-
     private void moveEnemyY(int value) {
         boolean movingDown = value > 0;
 
@@ -400,6 +409,7 @@ public class MainApp {
             enemy.getImage().setTranslateY(enemy.getHitBox().getTranslateY() - enemy.getImage().getFitHeight() + player.getHitBox().getHeight());
         }
     }
+
 
     private void movePlayerX(int value) {
         boolean movingRight = value > 0;
@@ -552,47 +562,45 @@ public class MainApp {
                     update();
                     updateEnemy();
                 }
-                if(counter == 10){
+                if (counter == 10) {
                     stopMusic();
                     System.out.println("done\n");
                     running = false;
 
                     // inserting to tblscore
                     InsertScore ins;
-                    if(isLevel1){
+                    if (isLevel1) {
                         ins = new InsertScore(GameController.loggedUserId, score, 1);
                         ins.insertScore();
-                    }else if(isLevel2){
+                    } else if (isLevel2) {
                         ins = new InsertScore(GameController.loggedUserId, score, 2);
                         ins.insertScore();
-                    }else if(isLevel3){
+                    } else if (isLevel3) {
                         ins = new InsertScore(GameController.loggedUserId, score, 3);
                         ins.insertScore();
                     }
 
+                    stopMusic();
                     exdialog.open();
+                    stopMusic();
                     score = 0;
                     hintPoints = 0;
                     isLevel1 = false;
                     isLevel2 = false;
                     isLevel3 = false;
 
-                    exdialog.setOnCloseRequest(event -> {
+                    exdialog.setOnCloseRequest(closeEvent -> {
                         System.out.println("Closed");
                     });
-                    counter=0;
-                    exdialog.btnmenu.setOnAction(event -> {
+                    counter = 0;
+                    exdialog.btnmenu.setOnAction(actionEvent -> {
                         stopMusic();
                         gameRoot.getChildren().clear();
-                        Scene scene1 = ((Node) event.getSource()).getScene();
+                        Scene scene1 = ((Node) actionEvent.getSource()).getScene();
                         Stage stage1 = (Stage) scene1.getWindow();
-                        stage1.close();
-                        Scene scene2 = ((Node) event.getSource()).getScene();
-                        Stage stage2 = (Stage) scene2.getWindow();
-                        stage2.close();
-                        //exdialog.close();         // I changed it to stage 2
+                        stage1.close(); // Close the current stage
 
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("level-ui.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPage.fxml"));
                         Parent root = null;
                         try {
                             root = loader.load();
@@ -605,8 +613,6 @@ public class MainApp {
                         Stage stage = new Stage();
                         stage.setScene(newScene);
                         stage.show();
-                        running = true;
-
                     });
                 }
 
@@ -614,7 +620,7 @@ public class MainApp {
                     dialogEvent = false;
                     keys.keySet().forEach(key -> keys.put(key, false));
 
-                    dialog.setOnCloseRequest(event -> {
+                    dialog.setOnCloseRequest(closeEvent -> {
                         if (dialog.isCorrect()) {
                             System.out.println("Correct");
                         } else {
@@ -628,4 +634,6 @@ public class MainApp {
         };
         timer.start();
     }
+
+
 }

@@ -4,8 +4,3 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
-
-#lvlbg{
-    -fx-background-image: url("level-ui-background.png");
-    -fx-background-size: cover;
-}

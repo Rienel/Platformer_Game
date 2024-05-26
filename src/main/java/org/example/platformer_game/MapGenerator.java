@@ -40,7 +40,7 @@ public class MapGenerator implements Runnable{
     }
 
     public ImageView lvl1setBg(){
-        Image bgk = new Image("lvlOneBackg.jpg");
+        Image bgk = new Image("LVLONE.gif");
         ImageView bg = new ImageView(bgk);
 
         bg.setFitHeight(LevelData.LEVEL_ONE.length * 60);
@@ -49,7 +49,7 @@ public class MapGenerator implements Runnable{
     }
 
     public ImageView lvl2setBg(){
-        Image bgk = new Image("lvlTwoBackg.jpg");
+        Image bgk = new Image("LVLTWO.gif");
         ImageView bg = new ImageView(bgk);
 
         bg.setFitHeight(LevelData.LEVEL_TWO.length * 60);
@@ -58,7 +58,7 @@ public class MapGenerator implements Runnable{
     }
 
     public ImageView lvl3setBg(){
-        Image bgk = new Image("lvlThreeBackg.jpg");
+        Image bgk = new Image("LVLTHREE.gif");
         ImageView bg = new ImageView(bgk);
 
         bg.setFitHeight(LevelData.LEVEL_THREE.length * 60);
