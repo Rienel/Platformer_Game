@@ -18,7 +18,7 @@
             </image>
          </ImageView>
       </graphic></Button>
-   <Button layoutX="492.0" layoutY="317.0" mnemonicParsing="false" styleClass="custom-button" stylesheets="@../../../style.css">
+   <Button fx:id="btnLeaderboard" layoutX="492.0" layoutY="317.0" mnemonicParsing="false" onAction="#onLeaderboard" styleClass="custom-button" stylesheets="@../../../style.css">
       <graphic>
          <ImageView fitHeight="78.0" fitWidth="284.0" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -26,7 +26,7 @@
             </image>
          </ImageView>
       </graphic></Button>
-   <Button layoutX="552.0" layoutY="425.0" mnemonicParsing="false" styleClass="custom-button" stylesheets="@../../../style.css">
+   <Button fx:id="btnQuit" layoutX="552.0" layoutY="425.0" mnemonicParsing="false" onAction="#onQuit" styleClass="custom-button" stylesheets="@../../../style.css">
       <graphic>
          <ImageView fitHeight="75.0" fitWidth="169.0" pickOnBounds="true" preserveRatio="true">
             <image>

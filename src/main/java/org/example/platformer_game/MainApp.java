@@ -471,6 +471,20 @@ public class MainApp {
     }
 
     @FXML
+    private void BACK(ActionEvent event) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPage.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 1280, 720);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void levelOne(ActionEvent actionEvent) throws IOException {
         playMusic(3);
         isLevel1 = true;
