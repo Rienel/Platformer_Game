@@ -3,7 +3,7 @@ package SQL;
 import java.sql.*;
 
 public class MySqlConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/dbplatformers";
+    private static final String URL = "jdbc:mysql://localhost:3306/dbplatformer";
     private static final String USER = "admin";
     private static final String PASSWORD = "admin123";
     public static Connection getConnection() {

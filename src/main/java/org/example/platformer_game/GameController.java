@@ -1,22 +1,15 @@
 package org.example.platformer_game;
 
 import SQL.MySqlConnection;
-import com.mysql.cj.x.protobuf.MysqlxPrepare;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -35,69 +28,10 @@ public class GameController {
     private TextField rtfUsername;
     @FXML
     private TextField rtfPassword;
-    @FXML
-    private Button levelUIButton;
 
     int LogedUser = -1;
     public static int loggedUserId;
 
-
-    //Leaderboard
-    @FXML
-    private TableView<UserScore> leaderboardTable;
-    @FXML
-    private TableColumn<UserScore, String> usernameColumn;
-    @FXML
-    private TableColumn<UserScore, Integer> scoreColumn;
-
-    private ObservableList<UserScore> data;
-
-    @FXML
-    public void initialize() {
-        data = FXCollections.observableArrayList();
-        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
-        scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
-
-        loadLeaderboardData();
-    }
-
-    private void loadLeaderboardData() {
-        String query = "SELECT username, score FROM tblusers ORDER BY score DESC";
-
-        try (Connection c = MySqlConnection.getConnection();
-             PreparedStatement preparedStatement = c.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            while (resultSet.next()) {
-                String username = resultSet.getString("username");
-                int score = resultSet.getInt("score");
-                data.add(new UserScore(username, score));
-            }
-
-            leaderboardTable.setItems(data);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static class UserScore {
-        private final SimpleStringProperty username;
-        private final SimpleIntegerProperty score;
-
-        public UserScore(String username, int score) {
-            this.username = new SimpleStringProperty(username);
-            this.score = new SimpleIntegerProperty(score);
-        }
-
-        public String getUsername() {
-            return username.get();
-        }
-
-        public int getScore() {
-            return score.get();
-        }
-    }
 
     @FXML
     protected void OnRegister(ActionEvent event) {
@@ -110,22 +44,8 @@ public class GameController {
             statement.setString(1, username);
             statement.setString(2, password);
             statement.executeUpdate();
-
-            Scene scene = ((Node) event.getSource()).getScene();
-            Stage registerStage = (Stage) scene.getWindow();
-            registerStage.close();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root, 1280, 720));
-            stage.setResizable(false);
-            stage.show();
-
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -166,20 +86,6 @@ public class GameController {
         }
     }
 
-    @FXML
-    private void goToLevelUI(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("level-ui.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1280, 720);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static int getLogUserId(String username){
         int id = 0;
         String query = "SELECT id FROM tblusers WHERE username = ?";
@@ -202,32 +108,5 @@ public class GameController {
         return id;
     }
 
-    @FXML
-    protected void onQuit(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1280, 720);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    protected void onLeaderboard(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Leaderboard.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1280, 720);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 }

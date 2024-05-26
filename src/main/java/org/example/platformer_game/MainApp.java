@@ -577,7 +577,7 @@ public class MainApp {
                     updateEnemy();
                 }
                 if (counter == 10) {
-                    stopMusic();
+                    sounds.stop();
                     System.out.println("done\n");
                     running = false;
 

@@ -18,7 +18,6 @@ public class CreateTable {
                     "username VARCHAR(50) NOT NULL, " +
                     "password VARCHAR(50) NOT NULL)";
             statement.execute(createTableQuery1);
-//            System.out.println("Users table created successfully!");
 
             String createTableQuery2 = "CREATE TABLE IF NOT EXISTS tblscore (" +
                     "scoreId INT AUTO_INCREMENT PRIMARY KEY, " +
@@ -28,7 +27,6 @@ public class CreateTable {
                     "userId INT(20) NOT NULL, " +
                     "FOREIGN KEY (userId) REFERENCES tblusers(id))";
             statement.execute(createTableQuery2);
-//            System.out.println("Score table created successfully!");
 
         } catch (SQLException e){
             e.printStackTrace();
