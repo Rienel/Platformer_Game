@@ -23,11 +23,11 @@ public class GameController {
     @FXML
     private TextField tfUsername;
     @FXML
-    private TextField tfPassword;
+    private PasswordField tfPassword;
     @FXML
     private TextField rtfUsername;
     @FXML
-    private TextField rtfPassword;
+    private PasswordField rtfPassword;
 
     int LogedUser = -1;
     public static int loggedUserId;

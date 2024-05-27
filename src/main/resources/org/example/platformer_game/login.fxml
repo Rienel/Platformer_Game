@@ -17,11 +17,11 @@
             <Font name="Bodoni MT" size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="tfPassword" layoutX="848.0" layoutY="268.0" promptText="Password">
+      <PasswordField fx:id="tfPassword" layoutX="848.0" layoutY="268.0" promptText="Password">
          <font>
             <Font name="Bodoni MT" size="15.0" />
          </font>
-      </TextField>
+      </PasswordField>
       <Button fx:id="btnLogIn" layoutX="871.0" layoutY="325.0" mnemonicParsing="false" onAction="#onLogIn" styleClass="custom-button" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="61.0" fitWidth="171.0" pickOnBounds="true" preserveRatio="true">
@@ -35,11 +35,11 @@
             <Font name="Bodoni MT" size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="rtfPassword" layoutX="265.0" layoutY="268.0" promptText="Password" styleClass="text-field" stylesheets="@../../../style.css">
+      <PasswordField fx:id="rtfPassword" layoutX="265.0" layoutY="268.0" promptText="Password" styleClass="text-field" stylesheets="@../../../style.css">
          <font>
             <Font name="Bodoni MT" size="15.0" />
          </font>
-      </TextField>
+      </PasswordField>
       <Button fx:id="btnRegister" layoutX="257.0" layoutY="321.0" mnemonicParsing="false" onAction="#OnRegister" prefHeight="71.0" prefWidth="195.0" styleClass="custom-button" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="69.0" fitWidth="225.0" pickOnBounds="true" preserveRatio="true" styleClass=".custom-button">

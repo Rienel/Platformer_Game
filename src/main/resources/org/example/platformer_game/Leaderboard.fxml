@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.platformer_game.GameController">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.platformer_game.UserList">
    <children>
-      <Label layoutX="86.0" layoutY="63.0" text="Username" />
-      <Label layoutX="285.0" layoutY="63.0" text="Score" />
-      <Label fx:id="username1" layoutX="86.0" layoutY="109.0" text="Label" />
-      <Label fx:id="username2" layoutX="86.0" layoutY="146.0" text="Label" />
-      <Label fx:id="username3" layoutX="86.0" layoutY="185.0" text="Label" />
-      <Label fx:id="username4" layoutX="86.0" layoutY="224.0" text="Label" />
-      <Label fx:id="score1" layoutX="286.0" layoutY="109.0" text="Label" />
-      <Label fx:id="score2" layoutX="286.0" layoutY="146.0" text="Label" />
-      <Label fx:id="score3" layoutX="286.0" layoutY="185.0" text="Label" />
-      <Label fx:id="score4" layoutX="286.0" layoutY="224.0" text="Label" />
-      <Label fx:id="username5" layoutX="86.0" layoutY="274.0" text="Label" />
-      <Label fx:id="username6" layoutX="86.0" layoutY="319.0" text="Label" />
-      <Label fx:id="username7" layoutX="86.0" layoutY="360.0" text="Label" />
-      <Label fx:id="username8" layoutX="86.0" layoutY="399.0" text="Label" />
-      <Label fx:id="username9" layoutX="86.0" layoutY="442.0" text="Label" />
-      <Label fx:id="username10" layoutX="86.0" layoutY="484.0" text="Label" />
-      <Label fx:id="score5" layoutX="286.0" layoutY="274.0" text="Label" />
-      <Label fx:id="score6" layoutX="286.0" layoutY="319.0" text="Label" />
-      <Label fx:id="score7" layoutX="286.0" layoutY="360.0" text="Label" />
-      <Label fx:id="score8" layoutX="286.0" layoutY="399.0" text="Label" />
-      <Label fx:id="score9" layoutX="286.0" layoutY="442.0" text="Label" />
-      <Label fx:id="score10" layoutX="286.0" layoutY="484.0" text="Label" />
+      <VBox fillWidth="true" layoutY="64.0" prefHeight="611.0" prefWidth="382.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="449.0" AnchorPane.rightAnchor="449.0" AnchorPane.topAnchor="64.0">
+         <HBox alignment="TOP_RIGHT">
+            <Button fx:id="goBackbtn" mnemonicParsing="false" onAction="#goBackMenu" text="Exit">
+               <HBox.margin>
+                  <Insets left="250.0" />
+                  <Insets bottom="80.0" />
+               </HBox.margin></Button>
+         </HBox>
+      <TableView fx:id="userTable" VBox.vgrow="NEVER">
+         <columns>
+            <TableColumn fx:id="unameColumn" minWidth="80" text="Username">
+               <cellValueFactory>
+                  <PropertyValueFactory property="name" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="lvl1Column" minWidth="100" text="Level 1 Score">
+               <cellValueFactory>
+                  <PropertyValueFactory property="number" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="lvl2Column" minWidth="100" text="Level 2 Score">
+               <cellValueFactory>
+                  <PropertyValueFactory property="number" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="lvl3Column" minWidth="100" text="Level 3 Score">
+               <cellValueFactory>
+                  <PropertyValueFactory property="number" />
+               </cellValueFactory>
+            </TableColumn>
+         </columns>
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+      </TableView>
+      </VBox>
    </children>
 </AnchorPane>
