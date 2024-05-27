@@ -6,7 +6,7 @@ module org.example.platformer_game {
     requires java.sql;
     requires mysql.connector.j;
     requires java.desktop;
-    requires javafx.media;
+//    requires javafx.media;
 
     opens org.example.platformer_game to javafx.fxml;
     exports org.example.platformer_game;

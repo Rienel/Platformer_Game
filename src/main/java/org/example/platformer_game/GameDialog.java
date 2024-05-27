@@ -20,9 +20,8 @@ public class GameDialog extends Stage {
     private TextField fieldAnswer = new TextField();
     private Text hintBox = new Text();
     private Text answerBox = new Text();
-
-    private ArrayList<Object[]> questions = new Question().getQuestions(1);
-
+    private ArrayList<Object[]> questions;
+    private int lvl;
     private boolean correct = false;
 
     private Random random = new Random();
@@ -32,6 +31,8 @@ public class GameDialog extends Stage {
     private int ctr = 0;
 
     public GameDialog() {
+        questions = new Question().getQuestions(lvl);
+
         Button btnsubmit = new Button("Submit");
         Button btnhint = new Button("Hint");
         randomizer();
@@ -104,7 +105,7 @@ public class GameDialog extends Stage {
         while (randomQ[ctr%10]==-1){
             ctr++;
         }
-
+        questions = new Question().getQuestions(lvl);
         System.out.println(Arrays.toString(randomQ));
         for(Object[] question : questions) {
             if(question[3].equals(randomQ[ctr%10])){
@@ -142,4 +143,7 @@ public class GameDialog extends Stage {
         this.correct = correct;
     }
 
+    public void setLvl(int lvl) {
+        this.lvl = lvl;
+    }
 }

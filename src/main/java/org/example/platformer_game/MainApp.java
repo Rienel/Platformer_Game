@@ -6,7 +6,9 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,6 +18,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -51,6 +56,9 @@ public class MainApp {
 
     public static Label hintPointsTxt = new Label();
     public static Label scoreTxt = new Label();
+
+    public static Label hp = new Label();
+    public static Label sc = new Label();
 
     private MapGenerator mapGenerator = new MapGenerator();
 
@@ -92,6 +100,7 @@ public class MainApp {
     private final Enemy enemy = new Enemy(70, 430, 40, 40);
     private Point2D enemyVelocity = new Point2D(0, 0);
 
+
     public MainApp() {
     }
 
@@ -100,22 +109,46 @@ public class MainApp {
     }
 
     private void initLevelContent(int level) {
-        Rectangle board = new Rectangle(200, 100, Color.WHITESMOKE);
+        Rectangle board = new Rectangle(115, 60, Color.AQUAMARINE);
         board.setLayoutY(25);
         board.setLayoutX(25);
 
+        board.setArcHeight(15);
+        board.setArcWidth(15);
+
+        Font font = new Font("Arial", 16);
+
+
+        hp.setText("Hint Points: ");
+        hp.setPrefHeight(hintPointsTxt.getFont().getSize());
+        hp.setPrefWidth(32*hp.getText().toString().length());
+        hp.setTextFill(Color.BLACK);
+        hp.setFont(font);
+        hp.setLayoutX(30);
+        hp.setLayoutY(30);
+
+        sc.setText("Score: ");
+        sc.setPrefHeight(hintPointsTxt.getFont().getSize());
+        sc.setPrefWidth(32*hp.getText().toString().length());
+        sc.setTextFill(Color.BLACK);
+        sc.setFont(font);
+        sc.setLayoutX(30);
+        sc.setLayoutY(60);
+
         hintPointsTxt.setText(String.valueOf(hintPoints));
         hintPointsTxt.setPrefHeight(hintPointsTxt.getFont().getSize());
-        hintPointsTxt.setPrefWidth(hintPointsTxt.getFont().getSize());
+        hintPointsTxt.setPrefWidth(hintPointsTxt.getFont().getSize() * 32);
         hintPointsTxt.setTextFill(Color.BLACK);
-        hintPointsTxt.setLayoutX(30);
+        hintPointsTxt.setFont(font);
+        hintPointsTxt.setLayoutX(120);
         hintPointsTxt.setLayoutY(30);
 
         scoreTxt.setText(String.valueOf(score));
         scoreTxt.setPrefHeight(scoreTxt.getFont().getSize());
-        scoreTxt.setPrefWidth(scoreTxt.getFont().getSize());
+        scoreTxt.setPrefWidth(scoreTxt.getFont().getSize() * 32);
         scoreTxt.setTextFill(Color.BLACK);
-        scoreTxt.setLayoutX(30);
+        scoreTxt.setFont(font);
+        scoreTxt.setLayoutX(120);
         scoreTxt.setLayoutY(60);
 
         String[] levelData;
@@ -150,13 +183,13 @@ public class MainApp {
 
         switch (level) {
             case 1:
-                appRoot.getChildren().addAll(mapGenerator.lvl1setBg(), board, gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+                appRoot.getChildren().addAll(mapGenerator.lvl1setBg(),gameRoot, uiRoot,board,scoreTxt, hintPointsTxt,hp,sc);
                 break;
             case 2:
-                appRoot.getChildren().addAll(mapGenerator.lvl2setBg(), board, gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+                appRoot.getChildren().addAll(mapGenerator.lvl2setBg(),gameRoot, uiRoot,board,scoreTxt, hintPointsTxt,hp,sc);
                 break;
             case 3:
-                appRoot.getChildren().addAll(mapGenerator.lvl3setBg(), board, gameRoot, uiRoot, scoreTxt, hintPointsTxt);
+                appRoot.getChildren().addAll(mapGenerator.lvl3setBg(),gameRoot, uiRoot,board,scoreTxt, hintPointsTxt,hp,sc);
                 break;
         }
     }
@@ -489,14 +522,17 @@ public class MainApp {
         playMusic(3);
         isLevel1 = true;
         levelOneInitContent();
-
+        dialog.setLvl(1);
         scene = ((Node) actionEvent.getSource()).getScene();
         Stage Login = (Stage) scene.getWindow();
         Login.close();
 
         Stage stage = (Stage) lvlOneButton.getScene().getWindow();
+        stage.setWidth(1280);
+        stage.setHeight(720);
         stage.setResizable(false);
         scene = new Scene(appRoot);
+
         scene.setOnKeyPressed(event -> keys.put(event.getCode(),true));
         scene.setOnKeyReleased(event -> keys.put(event.getCode(),false));
         stage.setScene(scene);
@@ -509,12 +545,14 @@ public class MainApp {
         playMusic(4);
         isLevel2 = true;
         levelTwoInitContent();
-
+        dialog.setLvl(2);
         scene = ((Node) actionEvent.getSource()).getScene();
         Stage Login = (Stage) scene.getWindow();
         Login.close();
 
         Stage stage = (Stage) lvlTwoButton.getScene().getWindow();
+        stage.setWidth(1280);
+        stage.setHeight(720);
         stage.setResizable(false);
         scene = new Scene(appRoot);
         scene.setOnKeyPressed(event -> keys.put(event.getCode(),true));
@@ -529,12 +567,14 @@ public class MainApp {
         playMusic(5);
         isLevel3 = true;
         levelThreeInitContent();
-
+        dialog.setLvl(3);
         scene = ((Node) actionEvent.getSource()).getScene();
         Stage Login = (Stage) scene.getWindow();
         Login.close();
 
         Stage stage = (Stage) lvlThreeButton.getScene().getWindow();
+        stage.setWidth(1280);
+        stage.setHeight(720);
         stage.setResizable(false);
         scene = new Scene(appRoot);
         scene.setOnKeyPressed(event -> keys.put(event.getCode(),true));
@@ -609,10 +649,11 @@ public class MainApp {
                     counter = 0;
                     exdialog.btnmenu.setOnAction(actionEvent -> {
                         stopMusic();
-                        gameRoot.getChildren().clear();
-                        Scene scene1 = ((Node) actionEvent.getSource()).getScene();
-                        Stage stage1 = (Stage) scene1.getWindow();
+                        Stage stage1 = (Stage) scene.getWindow();
                         stage1.close(); // Close the current stage
+                        exdialog.close();
+                        running = true;
+                        gameRoot.getChildren().clear();
 
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPage.fxml"));
                         Parent root = null;
