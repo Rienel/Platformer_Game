@@ -40,9 +40,10 @@ public class GameController {
 
         try (Connection c = MySqlConnection.getConnection();
              PreparedStatement statement = c.prepareStatement(
-                     "INSERT INTO tblusers (username, password) VALUES (?, ?)")) {
+                     "INSERT INTO tblusers (username, password, status) VALUES (?, ?, ?)")) {
             statement.setString(1, username);
             statement.setString(2, password);
+            statement.setInt(3, 0);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -58,7 +59,7 @@ public class GameController {
 
         try (Connection c = MySqlConnection.getConnection();
              PreparedStatement statement = c.prepareStatement(
-                     "SELECT * FROM tblusers WHERE username = ? AND password = ?")) {
+                     "SELECT * FROM tblusers WHERE username = ? AND password = ? AND status = 0")) {
             statement.setString(1, username);
             statement.setString(2, password);
 
