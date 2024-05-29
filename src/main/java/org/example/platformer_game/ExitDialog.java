@@ -25,6 +25,8 @@ public class ExitDialog extends Stage {
     private Text hintBox = new Text();
     private Text answerBox = new Text();
 
+    private Sounds sounds = new Sounds();
+
     @FXML
     Button btnmenu;
     public ExitDialog() {

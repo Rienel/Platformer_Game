@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 
-
 public class MainApp {
     @FXML
     private Button lvlOneButton;
@@ -83,6 +82,7 @@ public class MainApp {
     private boolean enemyFacingLeft = false;
     private boolean onGround = true;
     private boolean enemyOnGround = true;
+    private boolean isFinished = false;
 
     //Music
     private Sounds sounds = new Sounds();
@@ -97,8 +97,10 @@ public class MainApp {
     private Point2D playerVelocity = new Point2D(0, 0);
 
     //Enemy
-    private final Enemy enemy = new Enemy(70, 430, 40, 40);
+//    private final Enemy enemy = new Enemy(70, 430, 40, 40);
     private Point2D enemyVelocity = new Point2D(0, 0);
+
+
 
 
     public MainApp() {
@@ -172,7 +174,7 @@ public class MainApp {
         levelWidth = levelData[0].length() * 60;
         mapGenerator.run();
 
-        gameRoot.getChildren().addAll(player.getHitBox(), player.getImage(), enemy.getHitBox(), enemy.getImage());
+        gameRoot.getChildren().addAll(player.getHitBox(), player.getImage());
 
         player.getHitBox().translateXProperty().addListener((obs, old, newValue) -> {
             int offset = newValue.intValue();
@@ -243,7 +245,7 @@ public class MainApp {
 
         if (isPressed(KeyCode.W) && player.getHitBox().getTranslateY() >= 5 && onGround) {
             jumpPlayer();
-            playSE(0);
+//            playSE(0);
         } else if (!onGround && playerVelocity.getY() > 0) {
             if(facingLeft) {
                 player.animateFallR();
@@ -283,34 +285,34 @@ public class MainApp {
         centerCameraOnPlayer();
     }
 
-    private void updateEnemy() {
-        if (enemy.isCollidingWithSomething()) {
-            enemyFacingLeft = !enemyFacingLeft;
-        }
-
-        if (enemyFacingLeft) {
-            enemy.RwalkImages();
-            moveEnemyX(-2);
-        } else {
-            enemy.walkImages();
-            moveEnemyX(2);
-        }
-
-        if (enemyVelocity.getY() < 10) {
-            enemyVelocity = enemyVelocity.add(0, 1);
-        }
-
-        moveEnemyY((int) enemyVelocity.getY());
-
-        // If the enemy is close to the player, initiate attack animations
-        if (enemy.isInRangeOfPlayer(player)) {
-            if (enemyFacingLeft) {
-                enemy.RattackImages();
-            } else {
-                enemy.attackImages();
-            }
-        }
-    }
+//    private void updateEnemy() {
+//        if (enemy.isCollidingWithSomething()) {
+//            enemyFacingLeft = !enemyFacingLeft;
+//        }
+//
+//        if (enemyFacingLeft) {
+//            enemy.RwalkImages();
+//            moveEnemyX(-2);
+//        } else {
+//            enemy.walkImages();
+//            moveEnemyX(2);
+//        }
+//
+//        if (enemyVelocity.getY() < 10) {
+//            enemyVelocity = enemyVelocity.add(0, 1);
+//        }
+//
+//        moveEnemyY((int) enemyVelocity.getY());
+//
+//        // If the enemy is close to the player, initiate attack animations
+//        if (enemy.isInRangeOfPlayer(player)) {
+//            if (enemyFacingLeft) {
+//                enemy.RattackImages();
+//            } else {
+//                enemy.attackImages();
+//            }
+//        }
+//    }
 
     //Camera
     private void centerCameraOnPlayer() {
@@ -351,13 +353,11 @@ public class MainApp {
 
         if(dialog.isCorrect()){
             if(counter == 10){
-                playMusic(1);
                 System.out.println("Done");
                 exdialog.open();
                 running = false;
             }else{
                 counter++;
-                playSE(2);
                 System.out.println("Counter Check: " + counter);
             }
         }
@@ -376,6 +376,7 @@ public class MainApp {
             if (player.getHitBox().getBoundsInParent().intersects(hintBox.getBoundsInParent())) {
                 hintBox.getProperties().put("alive", false);
                 hintPoints++;
+//                playSE(2);
                 hintPointsTxt.setText(String.valueOf(hintPoints));
             }
         }
@@ -390,58 +391,58 @@ public class MainApp {
     }
 
     //ENEMY
-    private void moveEnemyX(int value) {
-        boolean movingRight = value > 0;
-
-        for (int i = 0; i < Math.abs(value); i++) {
-            for (Node platform : mapGenerator.getPlatforms()) {
-                if (enemy.getHitBox().getBoundsInParent().intersects(platform.getBoundsInParent())) {
-                    if (movingRight) {
-                        if (enemy.getHitBox().getTranslateX() + enemy.getHitBox().getWidth() == platform.getTranslateX()) {
-                            enemyFacingLeft = true;
-                            return;
-                        }
-                    } else {
-                        if (enemy.getHitBox().getTranslateX() == platform.getTranslateX() + platform.getBoundsInParent().getWidth()) {
-                            enemyFacingLeft = false;
-                            return;
-                        }
-                    }
-                }
-            }
-            enemy.getHitBox().setTranslateX(enemy.getHitBox().getTranslateX() + (movingRight ? 1 : -1));
-            enemy.getImage().setTranslateX(enemy.getImage().getTranslateX() + (movingRight ? 1 : -1));
-        }
-    }
-
-    private void moveEnemyY(int value) {
-        boolean movingDown = value > 0;
-
-        for (int i = 0; i < Math.abs(value); i++) {
-            for (Node platform : mapGenerator.getPlatforms()) {
-                if (enemy.getHitBox().getBoundsInParent().intersects(platform.getBoundsInParent())) {
-                    if (movingDown) {
-                        if (enemy.getHitBox().getTranslateY() + enemy.getHitBox().getHeight() == platform.getTranslateY()) {
-                            enemy.getHitBox().setTranslateY(enemy.getHitBox().getTranslateY() - 1);
-                            enemy.getImage().setTranslateY(enemy.getHitBox().getTranslateY() - enemy.getImage().getFitHeight() + enemy.getHitBox().getHeight());
-                            enemyVelocity = new Point2D(enemyVelocity.getX(), 0);
-                            enemyOnGround = true;
-                            return;
-                        }
-                    } else {
-                        if (enemy.getHitBox().getTranslateY() == platform.getTranslateY() + platform.getBoundsInParent().getHeight()) {
-                            enemy.getHitBox().setTranslateY(enemy.getHitBox().getTranslateY() + 1);
-                            enemy.getImage().setTranslateY(enemy.getHitBox().getTranslateY() - enemy.getImage().getFitHeight() + enemy.getHitBox().getHeight());
-                            enemyVelocity = new Point2D(enemyVelocity.getX(), 0);
-                            return;
-                        }
-                    }
-                }
-            }
-            enemy.getHitBox().setTranslateY(enemy.getHitBox().getTranslateY() + (movingDown ? 1 : -1));
-            enemy.getImage().setTranslateY(enemy.getHitBox().getTranslateY() - enemy.getImage().getFitHeight() + player.getHitBox().getHeight());
-        }
-    }
+//    private void moveEnemyX(int value) {
+//        boolean movingRight = value > 0;
+//
+//        for (int i = 0; i < Math.abs(value); i++) {
+//            for (Node platform : mapGenerator.getPlatforms()) {
+//                if (enemy.getHitBox().getBoundsInParent().intersects(platform.getBoundsInParent())) {
+//                    if (movingRight) {
+//                        if (enemy.getHitBox().getTranslateX() + enemy.getHitBox().getWidth() == platform.getTranslateX()) {
+//                            enemyFacingLeft = true;
+//                            return;
+//                        }
+//                    } else {
+//                        if (enemy.getHitBox().getTranslateX() == platform.getTranslateX() + platform.getBoundsInParent().getWidth()) {
+//                            enemyFacingLeft = false;
+//                            return;
+//                        }
+//                    }
+//                }
+//            }
+//            enemy.getHitBox().setTranslateX(enemy.getHitBox().getTranslateX() + (movingRight ? 1 : -1));
+//            enemy.getImage().setTranslateX(enemy.getImage().getTranslateX() + (movingRight ? 1 : -1));
+//        }
+//    }
+//
+//    private void moveEnemyY(int value) {
+//        boolean movingDown = value > 0;
+//
+//        for (int i = 0; i < Math.abs(value); i++) {
+//            for (Node platform : mapGenerator.getPlatforms()) {
+//                if (enemy.getHitBox().getBoundsInParent().intersects(platform.getBoundsInParent())) {
+//                    if (movingDown) {
+//                        if (enemy.getHitBox().getTranslateY() + enemy.getHitBox().getHeight() == platform.getTranslateY()) {
+//                            enemy.getHitBox().setTranslateY(enemy.getHitBox().getTranslateY() - 1);
+//                            enemy.getImage().setTranslateY(enemy.getHitBox().getTranslateY() - enemy.getImage().getFitHeight() + enemy.getHitBox().getHeight());
+//                            enemyVelocity = new Point2D(enemyVelocity.getX(), 0);
+//                            enemyOnGround = true;
+//                            return;
+//                        }
+//                    } else {
+//                        if (enemy.getHitBox().getTranslateY() == platform.getTranslateY() + platform.getBoundsInParent().getHeight()) {
+//                            enemy.getHitBox().setTranslateY(enemy.getHitBox().getTranslateY() + 1);
+//                            enemy.getImage().setTranslateY(enemy.getHitBox().getTranslateY() - enemy.getImage().getFitHeight() + enemy.getHitBox().getHeight());
+//                            enemyVelocity = new Point2D(enemyVelocity.getX(), 0);
+//                            return;
+//                        }
+//                    }
+//                }
+//            }
+//            enemy.getHitBox().setTranslateY(enemy.getHitBox().getTranslateY() + (movingDown ? 1 : -1));
+//            enemy.getImage().setTranslateY(enemy.getHitBox().getTranslateY() - enemy.getImage().getFitHeight() + player.getHitBox().getHeight());
+//        }
+//    }
 
 
     private void movePlayerX(int value) {
@@ -504,21 +505,10 @@ public class MainApp {
     }
 
     @FXML
-    private void BACK(ActionEvent event) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPage.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1280, 720);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
     private void levelOne(ActionEvent actionEvent) throws IOException {
+        if(isFinished) {
+            stopMusic();
+        }
         playMusic(3);
         isLevel1 = true;
         levelOneInitContent();
@@ -542,6 +532,9 @@ public class MainApp {
 
     @FXML
     private void levelTwo(ActionEvent actionEvent) throws IOException {
+        if(isFinished) {
+            stopMusic();
+        }
         playMusic(4);
         isLevel2 = true;
         levelTwoInitContent();
@@ -564,6 +557,10 @@ public class MainApp {
 
     @FXML
     private void levelThree(ActionEvent actionEvent) throws IOException {
+        System.out.println("Entering levelThree");
+        if(isFinished) {
+            stopMusic();
+        }
         playMusic(5);
         isLevel3 = true;
         levelThreeInitContent();
@@ -586,21 +583,42 @@ public class MainApp {
 
     // TODO fix the wide screen bug
 
+//    @FXML
+//    private void GameSystem(ActionEvent actionEvent) throws IOException {
+//        Scene scene = ((Node) actionEvent.getSource()).getScene();
+//        Stage Level = (Stage) scene.getWindow();
+//        Level.close();
+//
+//        FXMLLoader fxmlLoader = new FXMLLoader(GameSystem.class.getResource("login.fxml"));
+//        Parent root = fxmlLoader.load();
+//        scene = new Scene(root, 1280, 720);
+//        Stage stage = (Stage) logoutButton.getScene().getWindow();
+//        stage.setScene(scene);
+//
+//        //para di mu resize ang window
+//        stage.setResizable(false);
+//        stage.show();
+//    }
+
+    public void finishedGame() {
+        stopMusic();
+        playSE(1);
+        isFinished = true;
+    }
+
     @FXML
-    private void GameSystem(ActionEvent actionEvent) throws IOException {
-        Scene scene = ((Node) actionEvent.getSource()).getScene();
-        Stage Level = (Stage) scene.getWindow();
-        Level.close();
-
-        FXMLLoader fxmlLoader = new FXMLLoader(GameSystem.class.getResource("login.fxml"));
-        Parent root = fxmlLoader.load();
-        scene = new Scene(root, 1280, 720);
-        Stage stage = (Stage) logoutButton.getScene().getWindow();
-        stage.setScene(scene);
-
-        //para di mu resize ang window
-        stage.setResizable(false);
-        stage.show();
+    private void BACK(ActionEvent event) throws IOException {
+        stopMusic();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPage.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 1280, 720);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void setRunning(boolean running) {
@@ -614,10 +632,12 @@ public class MainApp {
             public void handle(long l) {
                 if (running) {
                     update();
-                    updateEnemy();
+//                    updateEnemy();
                 }
-                if (counter == 10) {
-                    sounds.stop();
+
+                if (counter == 1) {
+                    isFinished = true;
+                    finishedGame();
                     System.out.println("done\n");
                     running = false;
 
@@ -634,9 +654,7 @@ public class MainApp {
                         ins.insertScore();
                     }
 
-                    stopMusic();
                     exdialog.open();
-                    stopMusic();
                     score = 0;
                     hintPoints = 0;
                     isLevel1 = false;
@@ -648,9 +666,8 @@ public class MainApp {
                     });
                     counter = 0;
                     exdialog.btnmenu.setOnAction(actionEvent -> {
-                        stopMusic();
                         Stage stage1 = (Stage) scene.getWindow();
-                        stage1.close(); // Close the current stage
+                        stage1.close();
                         exdialog.close();
                         running = true;
                         gameRoot.getChildren().clear();

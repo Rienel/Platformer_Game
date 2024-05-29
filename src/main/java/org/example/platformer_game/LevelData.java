@@ -38,7 +38,7 @@ public class LevelData {
             "r    456    462       l6           3        46246  555       l",
             "j6   9ir    lj555556  97   4556   45556     98887       2    l",
             "u7    lj56  988888ir      4ku87   988ir                456   l",
-            "r     l00r        lr      9ir   2    lr           3    987   l",
+            "r   2 l00r        lr      9ir   2    lr           3    987   l",
             "r   45k00j56      lr       lr  456   lr          456       3 l",
             "j6  98i0000r      lj56 2 45kr  987   lr     2    987       55l",
             "u7    l0000j56    9888555k887        lr    456               l",
