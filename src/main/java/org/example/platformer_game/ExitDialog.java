@@ -45,4 +45,9 @@ public class ExitDialog extends Stage {
         show();
     }
 
+    public void openQuit() {
+        textDialog.setText("Give Up?\nGo Back to Main Menu");
+        show();
+    }
+
 }

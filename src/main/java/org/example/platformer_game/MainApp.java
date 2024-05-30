@@ -70,7 +70,7 @@ public class MainApp {
 
     private int counter = 0;
 
-    private boolean exdialogbool = false;
+    private boolean qtdialogbool = false;
     private Scene scene;
 
     public boolean isLevel1 = false;
@@ -334,6 +334,7 @@ public class MainApp {
     }
 
     private void handleInteractions() {
+
         for (Node QBox : mapGenerator.getMysteryQ()) {
             if (player.getHitBox().getBoundsInParent().intersects(QBox.getBoundsInParent())) {
                 if (isPressed(KeyCode.E)) {
@@ -354,12 +355,19 @@ public class MainApp {
         if(dialog.isCorrect()){
             if(counter == 10){
                 System.out.println("Done");
-                exdialog.open();
                 running = false;
             }else{
                 counter++;
                 System.out.println("Counter Check: " + counter);
             }
+        }
+
+        if (isPressed(KeyCode.X)) {
+            qtdialogbool = true;
+            running = false;
+        }else{
+            qtdialogbool = false;
+            running = true;
         }
 
         for(Iterator<Node> it = mapGenerator.getMysteryQ().iterator(); it.hasNext();){
@@ -635,7 +643,7 @@ public class MainApp {
 //                    updateEnemy();
                 }
 
-                if (counter == 1) {
+                if (counter == 10) {
                     isFinished = true;
                     finishedGame();
                     System.out.println("done\n");
@@ -687,6 +695,59 @@ public class MainApp {
                         stage.show();
                     });
                 }
+
+                if (qtdialogbool) {
+                    qtdialogbool = false;
+
+                    InsertScore ins;
+                    if (isLevel1) {
+                        ins = new InsertScore(GameController.loggedUserId, score, 1);
+                        ins.insertScore();
+                    } else if (isLevel2) {
+                        ins = new InsertScore(GameController.loggedUserId, score, 2);
+                        ins.insertScore();
+                    } else if (isLevel3) {
+                        ins = new InsertScore(GameController.loggedUserId, score, 3);
+                        ins.insertScore();
+                    }
+
+                    keys.keySet().forEach(key -> keys.put(key, false));
+
+                    exdialog.setOnCloseRequest(closeEvent -> {
+                        running = true;
+                    });
+
+                    exdialog.btnmenu.setOnAction(actionEvent -> {
+
+                        Stage stage1 = (Stage) scene.getWindow();
+                        stage1.close();
+                        exdialog.close();
+                        running = true;
+                        gameRoot.getChildren().clear();
+
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPage.fxml"));
+                        Parent root = null;
+                        try {
+                            root = loader.load();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        Scene newScene = new Scene(root, 1280, 720);
+
+                        newScene.getStylesheets().addAll(getClass().getClassLoader().getResource("style.css").toExternalForm());
+                        Stage stage = new Stage();
+                        stage.setScene(newScene);
+                        stage.show();
+
+                    });
+                    exdialog.openQuit();
+                    score = 0;
+                    hintPoints = 0;
+                    isLevel1 = false;
+                    isLevel2 = false;
+                    isLevel3 = false;
+                }
+
 
                 if (dialogEvent) {
                     dialogEvent = false;
