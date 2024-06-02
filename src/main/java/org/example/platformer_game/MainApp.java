@@ -93,7 +93,8 @@ public class MainApp {
     private final double smoothing = 0.1;
 
     //Player
-    private final Player player = new Player(70, 430, 40, 40);
+    //private final Player player = new Player(70, 430, 40, 40);
+    private final Player player = new Player(1200, 1000, 40, 40);
     private Point2D playerVelocity = new Point2D(0, 0);
 
     //Enemy
